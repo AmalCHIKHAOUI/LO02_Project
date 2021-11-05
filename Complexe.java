@@ -39,6 +39,7 @@ public class Complexe {
 	{
 		this.re=pow(this.re);
 		this.im=pow(this.im);
+		this.re=pow(this.re);
 	}
 	
 }
