@@ -2,29 +2,42 @@ package fr.utt.lo02.project;
 
 import java.util.*;
 
-import td8_lo02_collection.Joueur;
+import td8_lo02_collection.JeuCartes;
+
 
 public class Partie {
     private Partie objetUnique;
     private int round;
     private int turn;
+    private int nbJoueur;
+    private int nbOrdi;
+    private int gagnant;
+
+
+
     public ArrayList<Joueur> joueur = new ArrayList<Joueur> ();
+	private JeuCartes jeu;
+
+    
     private final static int pointMax = 5;
 
 
     
-    public Partie(int nbJoueur, int nbOrdi) {
+    public Partie(int nbJoueur, int nbOrdi, JeuCartes jeu) {
     	this.nbJoueur = nbJoueur;
     	this.nbOrdi = nbOrdi;
     	this.round = 1;
+    	this.turn = 1;
+    	this.gagnant = 0;
+    	this.jeu = jeu;
 
     }
-    private Partie getObjetUnique() {
+    public Partie getObjetUnique() {
         // Automatically generated method. Please do not modify this code.
         return this.objetUnique;
     }
 
-    private void setObjetUnique(Partie value) {
+    public void setObjetUnique(Partie value) {
         // Automatically generated method. Please do not modify this code.
         this.objetUnique = value;
     }
@@ -37,44 +50,43 @@ public class Partie {
     			this.joueur.add(new Joueur(i));
     		}
     		else {
-    			this.joueur.add((Ordi)new Joueur(i));
+    			this.joueur.add((Bot)new Joueur(i));
     		}
     		
     	}	
     }
+    
+    
 
-    private int nbOrdi;
 
-    private int getNbOrdi() {
+    public int getNbOrdi() {
         // Automatically generated method. Please do not modify this code.
         return this.nbOrdi;
     }
 
-    private void setNbOrdi(int value) {
+    public void setNbOrdi(int value) {
         // Automatically generated method. Please do not modify this code.
         this.nbOrdi = value;
     }
 
-    private int nbJoueur;
 
-    private int getNbJoueur() {
+    public int getNbJoueur() {
         // Automatically generated method. Please do not modify this code.
         return this.nbJoueur;
     }
 
-    private void setNbJoueur(int value) {
+    public void setNbJoueur(int value) {
         // Automatically generated method. Please do not modify this code.
         this.nbJoueur = value;
     }
 
-    private int gagnant;
 
-    private int getGagnant() {
+    public int getGagnant() {
         // Automatically generated method. Please do not modify this code.
         return this.gagnant;
     }
 
-    private void setGagnant(int value) {
+    public void setGagnant(int value) {
         // Automatically generated method. Please do not modify this code.
         this.gagnant = value;
     }
@@ -101,7 +113,7 @@ public class Partie {
 			Joueur j = it.next();
 			gagne = j.isVictoire();
 		}
-		return gagne;
+		return gagne ;
     }
 
     public void debutJeu() {
@@ -118,6 +130,43 @@ public class Partie {
     	System.out.println("Le jeu est terminé !!!!!!");
     	System.out.println("--------------------------");
     }
+    public void debutRound(int nbJoueur) { // on distribue les cartes à tout le monde
+    	System.out.println("--------------------------");
+    	System.out.println("Le round commence !!!!!!");
+    	System.out.println("--------------------------");
+    	this.jeu.melanger(); // mélanger les cartes
+    	int tempNbCarte = 0;
+    	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
+			Joueur j = (Joueur)it.next();
+			
+			if(nbJoueur == 3) {
+				
+				for(int i=tempNbCarte;i<tempNbCarte+4;i++) {
+					j.ramasserCarte(this.jeu.distribuerUneCarte(i));
+				}
+				tempNbCarte += 4;
+			}
+			if(nbJoueur == 4) {
+				for(int i=tempNbCarte;i<tempNbCarte+3;i++) {
+					j.ramasserCarte(this.jeu.distribuerUneCarte(i));
+				}
+				tempNbCarte += 3;
+			}
+			if(nbJoueur == 5) {
+				for(int i=tempNbCarte;i<tempNbCarte+2;i++) {
+					j.ramasserCarte(this.jeu.distribuerUneCarte(i));
+				}
+				tempNbCarte += 2;
+			}
+			if(nbJoueur == 6) {
+				for(int i=tempNbCarte;i<tempNbCarte+2;i++) {
+					j.ramasserCarte(this.jeu.distribuerUneCarte(i));
+				}
+				tempNbCarte += 2;
+			}
+		}
+    	
+    }
     
     public static void main(String[] args) {
     	System.out.println("---------------------------------");
@@ -125,27 +174,51 @@ public class Partie {
     	System.out.println("---------------------------------");
     	
     	Scanner scanner = new Scanner(System.in);
+    	JeuCartes jeu = new JeuCartes();
     	System.out.print("Combien de joueurs physiques : ");
     	int nbJoueur = scanner.nextInt();
     	System.out.print("Combien de joueurs virtuels : ");
     	int nbOrdi = scanner.nextInt();
-    	Partie partie = new Partie(nbJoueur, nbOrdi);
+    	Partie partie = new Partie(nbJoueur, nbOrdi, jeu);
+    	
+    	int nbJoueurTot = nbJoueur + nbOrdi ;
+    	
     	partie.debutJeu();
     	
     	System.out.print("Qui commence ? "); // Choisir qui commence au début du jeu
-    	int turn = scanner.nextInt();
-    	partie.setTurn(turn);
-    	Joueur joueurActuel = partie.joueur.get(turn-1);
+    	partie.turn=scanner.nextInt();
+    	
+    	Joueur joueurActuel = partie.joueur.get(partie.turn -1);
 
     	partie.initListeJoueur(nbJoueur,nbOrdi); //initialiser la liste des joueurs
     	
     	while (partie.gagne() == false) {
-    		joueurActuel = partie.joueur.get(turn-1);
+    		
+    		for(Iterator<Joueur> it = partie.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
+    			Joueur j = (Joueur)it.next();
+    			System.out.print("Joueur n° "+j.getNumJoueur()+" - Choisir votre rôle : witch ou villager ?");
+        		String role = scanner.nextLine();
+        		j.setRole(role);
+    		}
+    		
+    		partie.debutRound(nbJoueurTot); // on commence un nouveau round, on distribue les cartes 
+    		
+    		joueurActuel = partie.joueur.get(partie.turn -1);
+    		joueurActuel.toString(); //afficher le numéro et les cartes du Joueur
+    		
+    		joueurActuel.jouer(partie, scanner);
+    		
+    		
     		partie.turn++;
+    		if(partie.turn>nbJoueurTot) { // retourner au joueur 1 après le tour du dernier joueur
+    			partie.turn = 1;
+    		}
     		
     	}
-    	int numGagnant = joueurActuel.getNumJoueur();
-    	partie.finJeu(numGagnant);
+    	
+    	partie.gagnant = joueurActuel.getNumJoueur();
+    	partie.finJeu(partie.gagnant);
+    	
     	
      	
     }

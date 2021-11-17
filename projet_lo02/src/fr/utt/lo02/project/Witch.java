@@ -1,8 +1,10 @@
 package fr.utt.lo02.project;
 
 
-public class Witch extends CarteRumeur {
-    public void prendreCarteRevelle() {
+public enum Witch {
+	AngryMob, Inquisition, PointedHat, HookedNose, Broomstick, Wart, DuckingStool, Cauldron, EvilEye, Toad, BlackCat, PetNewt
+	
+	/*public void prendreCarteRevelle() {
     }
 
     public void jeterCarte() {
@@ -15,6 +17,6 @@ public class Witch extends CarteRumeur {
     }
 
     public void prendreProchainTour() {
-    }
+    }*/
 
 }

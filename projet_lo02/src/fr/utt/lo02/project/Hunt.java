@@ -1,8 +1,10 @@
 package fr.utt.lo02.project;
 
 
-public class Hunt extends CarteRumeur {
-    public void revelerIdJoueur() {
+public enum Hunt {
+    
+	AngryMob, Inquisition, PointedHat, HookedNose, Broomstick, Wart, DuckingStool, Cauldron, EvilEye, Toad, BlackCat, PetNewt
+	/*public void revelerIdJoueur() {
     }
 
     public void enleverPoint() {
@@ -21,6 +23,6 @@ public class Hunt extends CarteRumeur {
     }
 
     public void prendreProchainTour() {
-    }
+    }*/
 
 }
