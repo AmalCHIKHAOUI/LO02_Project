@@ -15,8 +15,7 @@ public class CarteRumeur {
     public void effetHunt() {
     }
 
-    public void revelerCarteRumeur() {
-    }
+    
 
     
     public String toString() {

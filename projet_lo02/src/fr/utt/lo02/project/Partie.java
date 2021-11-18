@@ -2,20 +2,19 @@ package fr.utt.lo02.project;
 
 import java.util.*;
 
-import td8_lo02_collection.JeuCartes;
-
 
 public class Partie {
-    private Partie objetUnique;
-    private int round;
-    private int turn;
-    private int nbJoueur;
-    private int nbOrdi;
-    private int gagnant;
+    protected Partie objetUnique;
+    protected int round;
+    protected int turn;
+    protected int nbJoueur;
+    protected int nbOrdi;
+    protected int gagnant;
 
 
 
     public ArrayList<Joueur> joueur = new ArrayList<Joueur> ();
+    public static Scanner scanner = new Scanner(System.in);
 	private JeuCartes jeu;
 
     
@@ -173,7 +172,6 @@ public class Partie {
     	System.out.println("Bienvenue dans le Jeu Witch Hunt");
     	System.out.println("---------------------------------");
     	
-    	Scanner scanner = new Scanner(System.in);
     	JeuCartes jeu = new JeuCartes();
     	System.out.print("Combien de joueurs physiques : ");
     	int nbJoueur = scanner.nextInt();
@@ -204,9 +202,10 @@ public class Partie {
     		partie.debutRound(nbJoueurTot); // on commence un nouveau round, on distribue les cartes 
     		
     		joueurActuel = partie.joueur.get(partie.turn -1);
-    		joueurActuel.toString(); //afficher le numéro et les cartes du Joueur
     		
-    		joueurActuel.jouer(partie, scanner);
+    		System.out.println(joueurActuel); //afficher le numéro et les cartes du Joueur
+    		
+    		joueurActuel.jouer(partie, scanner); // le joueur qui a la main joue
     		
     		
     		partie.turn++;
