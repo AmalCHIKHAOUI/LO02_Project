@@ -10,6 +10,11 @@ public class Joueur {
     protected int point;
     protected boolean elimine;
     public LinkedList<CarteRumeur> main = new LinkedList<CarteRumeur> ();
+    public static Scanner scanner = new Scanner(System.in);
+    
+    private final static int pointMax = 5;
+
+
 
     
     public Joueur(int numJoueur) {
@@ -23,8 +28,12 @@ public class Joueur {
     }
 
     public boolean isVictoire() {
-        // Automatically generated method. Please do not modify this code.
-        return this.victoire;
+    	if(this.point >= pointMax) {
+    		return this.victoire = true;
+    	}
+    	else {
+            return this.victoire = false;
+    	}
     }
 
     public void setVictoire(boolean value) {
@@ -61,12 +70,11 @@ public class Joueur {
 	}
     
     public void revelerCarteRumeur(CarteRumeur carte) {
-    	CarteRumeur carte = this.main.get(numCarte-1);
     	System.out.println(carte);
     }
 
 
-    public void isAccused(Scanner scanner) {
+    public void isAccused() {
     	System.out.print("Voulez-vous révéler votre rôle où révéler l'effet Witch d'une carte rumeur ? Entrez 'role' ou 'witch' : ");
 		if(scanner.nextLine()=="role") {
 			System.out.println("Le rôle du joueur "+ this.numJoueur +" est " + this.role);
@@ -82,7 +90,7 @@ public class Joueur {
 
 
 
-    public void jouer(Partie partie, Scanner scanner) {
+    public Partie jouer(Partie partie) {
    
     	System.out.print("accuser ou révéler une carte rumeur ? (entrer 'accuser' ou 'reveler') ");
 		String action = scanner.nextLine();
@@ -91,7 +99,7 @@ public class Joueur {
 			System.out.print("Le numéro du joueur que vous accusez : ");
     		int numJoueurAcc = scanner.nextInt();
     		Joueur joueurAccused = partie.joueur.get(numJoueurAcc-1);
-    		joueurAccused.isAccused(scanner);
+    		joueurAccused.isAccused();
     		if(joueurAccused.elimine == true) {
     			this.point++;
     			partie.turn = this.numJoueur; // le joueur actuel prend la main
@@ -109,6 +117,7 @@ public class Joueur {
     		carteJouee.effetHunt(); // activer effet hunt!
     		
 		}
+		return partie;
     }
     public String toString(){
 		StringBuffer sb = new StringBuffer();

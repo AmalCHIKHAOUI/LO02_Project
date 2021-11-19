@@ -10,6 +10,7 @@ public class Partie {
     protected int nbJoueur;
     protected int nbOrdi;
     protected int gagnant;
+    protected int nbJoueurElimine;
 
 
 
@@ -18,7 +19,6 @@ public class Partie {
 	private JeuCartes jeu;
 
     
-    private final static int pointMax = 5;
 
 
     
@@ -29,6 +29,7 @@ public class Partie {
     	this.turn = 1;
     	this.gagnant = 0;
     	this.jeu = jeu;
+    	this.nbJoueurElimine = 0;
 
     }
     public Partie getObjetUnique() {
@@ -49,7 +50,7 @@ public class Partie {
     			this.joueur.add(new Joueur(i));
     		}
     		else {
-    	
+    	    	
     			System.out.println("Tapez 1 pour prudent et tapez 2 pour agressive");
     			int strateg=scanner.nextInt();
     			Bot nouveauBot = new Bot(i);
@@ -109,6 +110,16 @@ public class Partie {
 
     public void getInstance() {
     }
+    
+    public void nbJoueurElimine() {
+    	this.nbJoueurElimine = 0;
+    	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
+			Joueur j = (Joueur)it.next();
+			if (j.elimine == true) {
+				this.nbJoueurElimine++;
+			}
+		}
+    }
 
     public boolean gagne() {
     	boolean gagne = false;
@@ -134,10 +145,11 @@ public class Partie {
     	System.out.println("Le jeu est terminé !!!!!!");
     	System.out.println("--------------------------");
     }
-    public void debutRound(int nbJoueur) { // on distribue les cartes à tout le monde
+    public void debutRound(int nbJoueur) { // on distribue les cartes à tout les joueurs
     	System.out.println("--------------------------");
     	System.out.println("Le round commence !!!!!!");
     	System.out.println("--------------------------");
+    	this.nbJoueurElimine = 0; // on reset le nb de joueurs éliminés à 0
     	this.jeu.melanger(); // mélanger les cartes
     	int tempNbCarte = 0;
     	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
@@ -210,7 +222,7 @@ public class Partie {
     		
     		System.out.println(joueurActuel); //afficher le numéro et les cartes du Joueur
     		
-    		joueurActuel.jouer(partie, scanner); // le joueur qui a la main joue
+    		joueurActuel.jouer(partie); // le joueur qui a la main joue
     		
     		
     		partie.turn++;

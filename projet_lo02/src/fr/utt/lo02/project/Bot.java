@@ -22,7 +22,7 @@ public class Bot extends Joueur {
     		strategie=new Prudent(); }
     	else 
     	{
-    		strategie=new Aggressif ();
+    		strategie=new Aggressif();
     	}
     	this.strateg=strategie;
     }

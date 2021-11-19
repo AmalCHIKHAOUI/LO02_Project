@@ -3,7 +3,7 @@ package fr.utt.lo02.project;
 
 public enum Hunt {
     
-	AngryMob, Inquisition, PointedHat, HookedNose, Broomstick, Wart, DuckingStool, Cauldron, EvilEye, Toad, BlackCat, PetNewt
+	ANGRYMOB, INQUISITION, POINTEDHAT, HOOKEDNOSE, BROOMSTICK, WART, DUCKINGSTOOL, CAULDRON, EVILEYE, TOAD, BLACKCAT, PETNEWT
 	/*public void revelerIdJoueur() {
     }
 
