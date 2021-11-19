@@ -111,13 +111,14 @@ public class Partie {
     public void getInstance() {
     }
     
-    public void nbJoueurElimine() {
+    public void countJoueurElimine() {
     	this.nbJoueurElimine = 0;
     	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
 			Joueur j = (Joueur)it.next();
 			if (j.elimine == true) {
 				this.nbJoueurElimine++;
 			}
+			
 		}
     }
 
@@ -207,7 +208,8 @@ public class Partie {
 
     	partie.initListeJoueur(nbJoueur,nbOrdi); //initialiser la liste des joueurs
     	
-    	while (partie.gagne() == false) {
+    	// ----------- boucle de la partie ---------------
+    	while (partie.gagne() == false) { 
     		
     		for(Iterator<Joueur> it = partie.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
     			Joueur j = (Joueur)it.next();
@@ -218,17 +220,29 @@ public class Partie {
     		
     		partie.debutRound(nbJoueurTot); // on commence un nouveau round, on distribue les cartes 
     		
-    		joueurActuel = partie.joueur.get(partie.turn -1);
-    		
-    		System.out.println(joueurActuel); //afficher le numéro et les cartes du Joueur
-    		
-    		joueurActuel.jouer(partie); // le joueur qui a la main joue
-    		
-    		
-    		partie.turn++;
-    		if(partie.turn>nbJoueurTot) { // retourner au joueur 1 après le tour du dernier joueur
-    			partie.turn = 1;
+    		// ----------- boucle du round ---------------
+    		while(partie.nbJoueurElimine < nbJoueurTot-1) { 
+    			joueurActuel = partie.joueur.get(partie.turn -1);
+        		
+        		System.out.println(joueurActuel); //afficher le numéro et les cartes du Joueur
+        		
+        		joueurActuel.jouer(partie); // le joueur qui a la main joue
+        		
+        		partie.countJoueurElimine();
+        		
+        		partie.turn++;
+        		
+        		if(partie.turn>nbJoueurTot) { // retourner au joueur 1 après le tour du dernier joueur
+        			partie.turn = 1;
+        		}
+        		
+        		partie.round++;
+        		
     		}
+    		
+    		
+    		
+    		
     		
     	}
     	
