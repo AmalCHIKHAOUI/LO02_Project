@@ -49,7 +49,12 @@ public class Partie {
     			this.joueur.add(new Joueur(i));
     		}
     		else {
-    			this.joueur.add((Bot)new Joueur(i));
+    	
+    			System.out.println("Tapez 1 pour prudent et tapez 2 pour agressive");
+    			int strateg=scanner.nextInt();
+    			Bot nouveauBot = new Bot(i);
+    			nouveauBot.setstrateg(strateg);
+    			this.joueur.add(nouveauBot);
     		}
     		
     	}	

@@ -25,7 +25,7 @@ public class JeuCartes {
 	
 	// Mélange de toutes les cartes. Appel de la méthode statique shuffle de la classe Collections
 	public void melanger(){
-		Collections.shuffle(tasCartes);
+		Collections.shuffle(this.tasCartes);
 	}
 	
 	

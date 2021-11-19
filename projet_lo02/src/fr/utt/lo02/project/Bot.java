@@ -1,9 +1,38 @@
 package fr.utt.lo02.project;
 
 
-public class Bot extends Joueur implements Strategie {
+public class Bot extends Joueur {
     private int numBot;
-
+    private Strategie strateg;
+    
+    public Bot(int numJoueur ) {
+    	super(numJoueur);
+    	this.numBot=numJoueur;
+    	}
+    
+    private Strategie getstrateg()
+    {
+    	return this.strateg;
+    }
+    
+    public void setstrateg(int strateg)
+    {
+    	Strategie strategie;
+    	if (strateg==1) {
+    		strategie=new Prudent(); }
+    	else 
+    	{
+    		strategie=new Aggressif ();
+    	}
+    	this.strateg=strategie;
+    }
+    
+   public void jouer()
+   {
+	   strateg.jouer();
+   }    
+   
+   
     private int getNumBot() {
         // Automatically generated method. Please do not modify this code.
         return this.numBot;
@@ -40,7 +69,6 @@ public class Bot extends Joueur implements Strategie {
 
     public int point;
 
-    public void jouer() {
-    }
+    
 
 }
