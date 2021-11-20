@@ -16,7 +16,7 @@ public class Partie {
 
     public ArrayList<Joueur> joueur = new ArrayList<Joueur> ();
     public static Scanner scanner = new Scanner(System.in);
-	private JeuCartes jeu;
+	protected JeuCartes jeu;
 
     
 
@@ -53,7 +53,7 @@ public class Partie {
     	    	
     			System.out.println("Tapez 1 pour prudent et tapez 2 pour agressive");
     			int strateg=scanner.nextInt();
-    			Bot nouveauBot = new Bot(i);
+    			Bot nouveauBot = (Bot) new Joueur(i);
     			nouveauBot.setstrateg(strateg);
     			this.joueur.add(nouveauBot);
     		}
@@ -156,6 +156,8 @@ public class Partie {
     	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
 			Joueur j = (Joueur)it.next();
 			
+			j.carteRevelee.clear(); // supprimer toutes les cartes faussées du joueur sélectionné
+			
 			if(nbJoueur == 3) {
 				
 				for(int i=tempNbCarte;i<tempNbCarte+4;i++) {
@@ -184,6 +186,46 @@ public class Partie {
 		}
     	
     }
+    
+    public void effetWitch(CarteRumeur carte, int numJoueurAccusant, int numJoueurAccuse) {
+    	if(carte.witch == Witch.ANGRYMOB && carte.witch == Witch.BROOMSTICK && carte.witch == Witch.WART && carte.witch == Witch.TOAD && carte.witch == Witch.BLACKCAT && carte.witch == Witch.PETNEWT) { //prendre le prochain tour
+    		this.turn = numJoueurAccuse;
+    	}
+    	else if(carte.witch == Witch.INQUISITION){ // reprendre carte révélée
+    		Joueur j = this.joueur.get(numJoueurAccuse-1);
+    		j.main.add(j.carteRevelee.get(0));
+    		j.carteRevelee.remove(0); // on enlève la carte des cartes révélées
+    		this.turn = numJoueurAccuse;
+
+    	}
+    	else if(carte.witch == Witch.POINTEDHAT){ // prendre une carte de l'adversaire
+    		Joueur j = this.joueur.get(numJoueurAccuse-1); // joueur accusé
+    		Joueur j1 = this.joueur.get(numJoueurAccusant-1); // joueur accusant
+    		j.main.add(j1.main.get(0));
+    		j1.main.remove(0); // on enlève la carte de la main du joueur auccanst
+    		this.turn = numJoueurAccuse;
+    		
+    	}
+    	else if(carte.witch == Witch.DUCKINGSTOOL && carte.witch == Witch.EVILEYE){ //choisir le prochain joueur
+    		System.out.println("Entrez le numéro du joueur qui joue le prohain tour : ");
+    		this.turn = scanner.nextInt();
+    		
+    	}
+    	else if(carte.witch == Witch.CAULDRON){ //Le joueur qui vous accuse jette une carte et vous prenez le prochain tour
+    		Joueur j1 = this.joueur.get(numJoueurAccusant-1);
+    		j1.melanger();
+    		j1.carteRevelee.add(j1.main.get(0));
+    		j1.main.remove(0);
+    		this.turn = numJoueurAccuse;
+    		
+    	}
+    	
+    }
+
+    public void effetHunt() {
+    }
+    
+    
     
     public static void main(String[] args) {
     	System.out.println("---------------------------------");
@@ -226,21 +268,34 @@ public class Partie {
         		
         		System.out.println(joueurActuel); //afficher le numéro et les cartes du Joueur
         		
-        		joueurActuel.jouer(partie); // le joueur qui a la main joue
+        		partie = joueurActuel.jouer(partie); // le joueur qui a la main joue
         		
         		partie.countJoueurElimine();
         		
-        		partie.turn++;
+        		/*partie.turn++;
         		
         		if(partie.turn>nbJoueurTot) { // retourner au joueur 1 après le tour du dernier joueur
         			partie.turn = 1;
         		}
         		
-        		partie.round++;
+        		partie.round++;*/
         		
     		}
     		
+    		Iterator<Joueur> it1 = partie.joueur.iterator();
+    		while(it1.hasNext()) {
+    			Joueur joueurRes = it1.next();
+    			if(joueurRes.elimine == false) {
+    				joueurActuel = joueurRes;
+    			}
+    		}
     		
+    		if(joueurActuel.role == "witch") {
+    			joueurActuel.point += 2;
+    		}
+    		else if(joueurActuel.role =="villager") {
+    			joueurActuel.point++;
+    		}
     		
     		
     		
