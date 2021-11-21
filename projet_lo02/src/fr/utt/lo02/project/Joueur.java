@@ -70,10 +70,19 @@ public class Joueur {
     public void revelerCarteRumeur(CarteRumeur carte) {
     	System.out.println(carte);
     }
+    public boolean estVide(LinkedList<CarteRumeur> carte) {
+		int tailleTas = carte.size();
+		if(tailleTas == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 
     public Partie isAccused(Partie partie, Joueur joueurAccusant) {
-    	System.out.print("Voulez-vous révéler votre rôle où révéler l'effet Witch d'une carte rumeur ? Entrez 'role' ou 'witch' : ");
+    	System.out.print("Voulez-vous révéler votre rôle ou révéler l'effet Witch d'une carte rumeur ? Entrez 'role' ou 'reveler' : ");
 		if(scanner.nextLine()=="role") {
 			System.out.println("Le rôle du joueur "+ this.numJoueur +" est " + this.role);
 			if(this.role=="witch") {
@@ -81,10 +90,11 @@ public class Joueur {
 			}
 				
 		}
-		else if(scanner.nextLine()=="witch") {
+		else if(scanner.nextLine()=="reveler") {
+			System.out.println("-------------------------------------------------------------");
 			System.out.println("Voici la carte que vous avez révélé avec son effet Witch? : ");
 			System.out.println("-------------------------------------------------------------");
-			System.out.println(this.main.get(0));
+    		this.revelerCarteRumeur(this.main.get(0));
 			partie.effetWitch(this.main.get(0), joueurAccusant.numJoueur, this.numJoueur);
 		}
 		return partie;
@@ -116,7 +126,7 @@ public class Joueur {
     		CarteRumeur carteJouee = this.main.get(numCarteRevelee-1);
     		this.revelerCarteRumeur(carteJouee);
     		
-    		partie.effetHunt(); // activer effet hunt!
+    		partie.effetHunt(carteJouee,this.numJoueur); // activer effet hunt!
     		
 		}
 		return partie;
