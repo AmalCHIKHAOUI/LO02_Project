@@ -59,7 +59,7 @@ public class CarteRumeur {
     	sb.append("\n Hunt! : ");
     	sb.append(this.hunt);
     	if(this.hunt == Hunt.ANGRYMOB) {
-    		sb.append("\n Révéler l'identité d'un autre joueur  \n");
+    		sb.append("\n Révéler l'identité d'un autre joueur : si witch, vous gagnez 2 pts et si villager, vous perdez 2 pts  \n");
     	}
     	else if(this.hunt == Hunt.INQUISITION) {
     		sb.append("\n Choisir le prochain et regarder son identité \n");
@@ -68,7 +68,7 @@ public class CarteRumeur {
     		sb.append("\n Reprendre une carte révélée dans votre main et choisir le prochain joueur \n");
     	}
     	else if(this.hunt == Hunt.HOOKEDNOSE) {
-    		sb.append("\n Coisir le prochain joueur et prendre une de ses cartes  \n");
+    		sb.append("\n Choisir le prochain joueur et prendre une de ses cartes  \n");
     	}
     	else if(this.hunt == Hunt.BROOMSTICK) {
     		sb.append("\n Choisir le prochain joueur \n");

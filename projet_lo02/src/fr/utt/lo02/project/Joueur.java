@@ -9,8 +9,13 @@ public class Joueur {
     protected boolean victoire;
     protected int point;
     protected boolean elimine;
+    protected boolean revealed;
     public LinkedList<CarteRumeur> main = new LinkedList<CarteRumeur>();
     public LinkedList<CarteRumeur> carteRevelee = new LinkedList<CarteRumeur>();
+    
+    // constante utilisée pour savoir si un joueur est witch ou villager
+    protected final String w="witch"; 
+    protected final String v="villager";
 
     public static Scanner scanner = new Scanner(System.in);
     
@@ -26,6 +31,7 @@ public class Joueur {
     	this.accused = false;
     	this.point = 0;
     	this.role = null;
+    	this.revealed = false;
     	
     }
 
@@ -82,20 +88,31 @@ public class Joueur {
 
 
     public Partie isAccused(Partie partie, Joueur joueurAccusant) {
-    	System.out.print("Voulez-vous révéler votre rôle ou révéler l'effet Witch d'une carte rumeur ? Entrez 'role' ou 'reveler' : ");
-		if(scanner.nextLine()=="role") {
+    	
+		System.out.println("-------------------------------------------------------------");
+    	System.out.print("Joueur "+this.numJoueur+" - Voulez-vous révéler votre rôle(1) ou révéler l'effet Witch d'une carte rumeur(2) ? ");
+		if(scanner.nextInt()==1) {
+			this.revealed = true;
+			System.out.println("-------------------------------------------------------------");
 			System.out.println("Le rôle du joueur "+ this.numJoueur +" est " + this.role);
-			if(this.role=="witch") {
+			System.out.println("-------------------------------------------------------------");
+			if(this.role.equalsIgnoreCase(this.w)) {
 				this.elimine = true;
 			}
 				
 		}
-		else if(scanner.nextLine()=="reveler") {
+		else if(scanner.nextInt()==2) {
+			System.out.println("-------------------------------------------------------------");
+			System.out.print("Entrez le numéro de la carte que vous voulez révéler : ");
+			int numCarteRevelee = scanner.nextInt();
 			System.out.println("-------------------------------------------------------------");
 			System.out.println("Voici la carte que vous avez révélé avec son effet Witch? : ");
 			System.out.println("-------------------------------------------------------------");
     		this.revelerCarteRumeur(this.main.get(0));
 			partie.effetWitch(this.main.get(0), joueurAccusant.numJoueur, this.numJoueur);
+			
+			this.carteRevelee.add(this.main.get(numCarteRevelee-1)); // supprimer la carte jouée après l'avoir activé
+    		this.main.remove(numCarteRevelee-1);
 		}
 		return partie;
     }
@@ -103,12 +120,16 @@ public class Joueur {
 
 
     public Partie jouer(Partie partie) {
-   
-    	System.out.print("accuser ou révéler une carte rumeur ? (entrer 'accuser' ou 'reveler') ");
-		String action = scanner.nextLine();
-		
-		if(action == "accuser") {
-			System.out.print("Le numéro du joueur que vous accusez : ");
+    	
+    	System.out.println("---------------------------------");
+    	System.out.print("accuser(1) ou révéler(2) une carte rumeur ? ");
+		int action = scanner.nextInt();
+		/*String accuser = "accuser";
+		String reveler = "reveler";*/
+		if(action == 1) {
+		//if(action.equalsIgnoreCase(accuser)) {
+	    	System.out.println("---------------------------------");
+			System.out.print("Entrez le numéro du joueur que vous voulez accuser : ");
     		int numJoueurAcc = scanner.nextInt();
     		Joueur joueurAccused = partie.joueur.get(numJoueurAcc-1);
     		partie = joueurAccused.isAccused(partie,this);
@@ -120,13 +141,17 @@ public class Joueur {
     			partie.turn = numJoueurAcc; // le joueur accusé prend la main
     		}
 		}
-		else if(action == "reveler") {
-			System.out.print("Le numéro de la carte que vous voulez utiliser  : ");
+		else if(action == 2) {
+	    	System.out.println("---------------------------------");
+			System.out.print("Entrez le numéro de la carte que vous voulez utiliser  : ");
     		int numCarteRevelee = scanner.nextInt();
     		CarteRumeur carteJouee = this.main.get(numCarteRevelee-1);
     		this.revelerCarteRumeur(carteJouee);
     		
     		partie.effetHunt(carteJouee,this.numJoueur); // activer effet hunt!
+    		
+    		this.carteRevelee.add(carteJouee); // supprimer la carte jouée après l'avoir activé
+    		this.main.remove(numCarteRevelee-1);
     		
 		}
 		return partie;
@@ -141,11 +166,11 @@ public class Joueur {
 	}
     /*public static void main (String[] args) {
     	Joueur j=new Joueur(3);
-    	CarteRumeur c1 = new CarteRumeur(Hunt.AngryMob,Witch.AngryMob);
-    	CarteRumeur c2 = new CarteRumeur(Hunt.Inquisition,Witch.Inquisition);
+    	CarteRumeur c1 = new CarteRumeur(Hunt.ANGRYMOB,Witch.ANGRYMOB);
+    	CarteRumeur c2 = new CarteRumeur(Hunt.INQUISITION,Witch.INQUISITION);
     	j.main.add(c1);
     	j.main.add(c2);
-    	System.out.println(j);
+    	System.out.println(j.main);
 
 
     	
