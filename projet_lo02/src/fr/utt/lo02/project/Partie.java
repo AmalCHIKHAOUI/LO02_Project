@@ -16,8 +16,10 @@ public class Partie {
 
 
     // constante utilisée pour savoir si un joueur est witch ou villager
-    protected final String w="witch"; 
-    protected final String v="villager";
+    protected static final String w="witch"; 
+    protected static final String v="villager";
+    
+    private static boolean check = false; // à utiliser pour vérifier des conditions d'entrée pour l'utilisateur
 
     public ArrayList<Joueur> joueur = new ArrayList<Joueur> ();
     public static Scanner scanner = new Scanner(System.in);
@@ -239,27 +241,19 @@ public class Partie {
 		System.out.println("Le joueur "+j.numJoueur+" est le dernier joueur non révélé du round ");
     	System.out.println("--------------------------");
 
-		if(j.role.equalsIgnoreCase(this.w)) {
+		if(j.role.equalsIgnoreCase(w)) {
 			j.point += 2;
 			System.out.println("Il est witch donc il gagne 2 points ");
 	    	System.out.println("--------------------------");
 
 		}
-		else if(j.role.equalsIgnoreCase(this.v)) {
+		else if(j.role.equalsIgnoreCase(v)) {
 			j.point++;
 			System.out.println("Il est villager donc il gagne 1 point ");
 	    	System.out.println("--------------------------");
 
 
 		}
-		
-		System.out.println("Récapitulatif des points de chaque joueur : ");
-		Iterator<Joueur> it1 = this.joueur.iterator();
-		while(it1.hasNext()) {
-			joueurRes = /*(Joueur)*/it1.next();
-			System.out.println("Joueur "+joueurRes.numJoueur+" : "+joueurRes.point+" point(s)");
-		}
-    	System.out.println("--------------------------");
 
 		
 		this.round++; // on incrémente l'attribut round
@@ -281,6 +275,10 @@ public class Partie {
         		System.out.println("------------------------");
         		j.main.add(j.carteRevelee.get(0));
         		j.carteRevelee.remove(0); // on enlève la carte des cartes révélées
+        		System.out.println("Voici votre main à présent : ");
+        		System.out.println(j.main);
+        		System.out.println("------------------------");
+        		
     		}
     		else {
     			System.out.println("Vous n'avez révélé aucune carte");
@@ -291,28 +289,62 @@ public class Partie {
 
     	}
     	else if(carte.witch == Witch.POINTEDHAT){ // prendre une carte de l'adversaire
-    		System.out.println("Vous prenez une carte au hasard du joueur accusant");
-    		System.out.println("------------------------");
-    		j.main.add(j1.main.get(0));
-    		j1.main.remove(0); // on enlève la carte de la main du joueur accusant
-    		System.out.println("Voici votre main à présent :");
-    		System.out.println("------------------------");
-    		System.out.println(j.main);
-    		System.out.println("------------------------");
+    		
+    		if(j1.estVide(j1.main) == false && j1.main.size() > 1 ) { // le joueur accusé peut prendre une carte si la main de l'adversaire n'est pas vide 
+    			System.out.println("Vous prenez une carte au hasard du joueur accusant");
+        		System.out.println("------------------------");
+    			j.main.add(j1.main.get(0));
+        		j1.main.remove(0); // on enlève la carte de la main du joueur accusant
+        		System.out.println("Voici votre main à présent :");
+        		System.out.println("------------------------");
+        		System.out.println(j.main);
+        		System.out.println("------------------------");
+    		}
+    		else {
+    			System.out.println("Le joueur accusant n'a plus de carte rumeur. Vous ne lui prenez rien");
+        		System.out.println("------------------------");
+    		}
+    		
     		this.turn = numJoueurAccuse;
     		
     	}
     	else if(carte.witch == Witch.DUCKINGSTOOL || carte.witch == Witch.EVILEYE){ //choisir le prochain joueur
-    		System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+    		check = false;
+    		while(check==false) {
+    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+        		this.turn = scanner.nextInt();
+        		if(this.turn != numJoueurAccuse && this.turn > 0 && this.turn <= (this.nbOrdi + this.nbJoueur) && this.joueur.get(this.turn-1).elimine==false) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
     		
-    		this.turn = scanner.nextInt();
+    		
     		System.out.println("------------------------");
     		
     	}
     	else if(carte.witch == Witch.CAULDRON){ //Le joueur qui vous accuse jette une carte et vous prenez le prochain tour
-    		j1.melanger();
-    		j1.carteRevelee.add(j1.main.get(0));
-    		j1.main.remove(0);
+    		System.out.println("Le joueur accusant doit jeter une carte");
+    		System.out.println("------------------------");
+    		if(j1.estVide(j1.main)==false) {
+    			j1.melanger();
+        		j1.carteRevelee.add(j1.main.get(0));
+        		j1.main.remove(0);
+        		System.out.println("Voici la main du joueur accusé après avoir jeté une carte : ");
+        		System.out.println(j1.main);
+        		System.out.println("------------------------");
+    		}
+    		else {
+        		System.out.println("Malheureusement le joueur accusant n'a plus de cartes rumeurs. Vous venez d'utiliser inutilement votre carte !");
+        		System.out.println("------------------------");
+
+    		}
+    		System.out.println("Vous prenez le tour suivant");
+    		System.out.println("------------------------");
     		this.turn = numJoueurAccuse;
     		
     	}
@@ -321,66 +353,117 @@ public class Partie {
 
     public void effetHunt(CarteRumeur carte, int numJoueur) {
 		Joueur j = this.joueur.get(numJoueur-1);
+		int nbJoueurTot = this.nbJoueur + this.nbOrdi;
 
     	if(carte.hunt == Hunt.ANGRYMOB){ // révéler la carte d'un autre joueur
-    		System.out.println("------------------------");
-    		System.out.print("Entrer le numéro du joueur dont vous voulez révéler l'identité :");
-    		int numJoueurChoisi = scanner.nextInt();
-    		System.out.println("------------------------");
+    		int numJoueurChoisi = 0;
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("------------------------");
+        		System.out.print("Entrer le numéro du joueur dont vous voulez révéler l'identité :");
+        		numJoueurChoisi = scanner.nextInt();
+        		if(numJoueurChoisi > 0 && numJoueurChoisi <= nbJoueurTot && this.joueur.get(numJoueurChoisi-1).revealed==false) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
     		
     		Joueur j1 = this.joueur.get(numJoueurChoisi-1);
-    		System.out.println("Le joueur que vous avez choisi est ... un "+ j1.role);
     		System.out.println("------------------------");
+    		System.out.println("Le joueur que vous avez choisi est ... un "+ j1.role);
 
     		j1.revealed = true; // le joueur a révélé son identité
-    		if(j1.role.equalsIgnoreCase(this.w)) {
-    			System.out.println("Vous gagnez 2 points et vous jouez le prochain tour");
+    		if(j1.role.equalsIgnoreCase(w)) {
         		System.out.println("------------------------");
+    			System.out.println("Vous gagnez 2 points et vous jouez le prochain tour");
+        		j1.elimine=true;
     			j.point+=2;
     			this.turn = numJoueur;
     		}
-    		else if(j1.role.equalsIgnoreCase(this.v)){
-    			System.out.println("Vous perdez 2 points et le joueur choisi prend le prochain tour");
+    		else if(j1.role.equalsIgnoreCase(v)){
         		System.out.println("------------------------");
+    			System.out.println("Vous perdez 2 points et le joueur choisi prend le prochain tour");
     			j.point-=2;
     			if(j.point < 0) { // on vérifie que le score du joueur n'est pas négatif
     				j.point=0;
     			}
     			this.turn = j1.numJoueur; // on donne la main au joueur dont l'identité a été révélé
     		}
-    		
-
 
     	}
     	else if(carte.hunt==Hunt.INQUISITION) {
-			System.out.println("----------------------------------") ;
-			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
-    		this.turn = scanner.nextInt();
+			
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("----------------------------------") ;
+    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+        		this.turn = scanner.nextInt();
+        		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
     		System.out.println("----------------------------------") ;
     		System.out.println("Voici l'identité du joueur que vous avez choisi (à regarder discrètement) : "+this.joueur.get(this.turn-1).role) ;
-    		System.out.println("----------------------------------") ;
 
     	}
     	else if(carte.hunt==Hunt.POINTEDHAT) {
     		System.out.println("----------------------------------") ;
 			System.out.println("L'effet Hunt de cette carte vous permet donc de reprendre une de vos cartes révélées");
 			if(j.estVide(j.carteRevelee)==true) {
+	    		System.out.println("----------------------------------") ;
 				System.out.println("Vous n'avez pas encore révélé de cartes ! ");
 			}
 			else {
 				j.main.add(j.carteRevelee.get(0)); // on insère la carte révélée dans votre main
 				j.carteRevelee.remove(0);
 			}
-			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
-    		this.turn = scanner.nextInt();
-    		System.out.println("Voici l'identité du joueur que vous avez choisi (à regarder discrètement) : "+this.joueur.get(this.turn-1).role) ;
+    		
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("----------------------------------") ;
+    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+        		this.turn = scanner.nextInt();
+        		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
     		System.out.println("----------------------------------") ;
+    		System.out.println("Voici l'identité du joueur que vous avez choisi (à regarder discrètement) : "+this.joueur.get(this.turn-1).role) ;
 
     	}
     	else if(carte.hunt==Hunt.HOOKEDNOSE) {
-    		System.out.println("----------------------------------") ;
-    		System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
-    		this.turn = scanner.nextInt();
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("----------------------------------") ;
+    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+        		this.turn = scanner.nextInt();
+        		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
     		System.out.println("----------------------------------") ;
     		System.out.println("Vous avez la possibilité de lui prendre une carte aléatoire") ;
     		Joueur j1 = this.joueur.get(this.turn-1);
@@ -390,60 +473,114 @@ public class Partie {
     			j1.main.remove(0);
     			System.out.println("----------------------------------") ;
         		System.out.println("Vous lui avez pris une carte avec succès !!!!") ;
-        		System.out.println("----------------------------------") ;
     		}
     		else {
     			System.out.println("----------------------------------") ;
         		System.out.println("Le joueur que vous avez choisi n'a plus de carte dans sa main !!") ;
-        		System.out.println("----------------------------------") ;
     		}
 
     	}
     	else if(carte.hunt == Hunt.BROOMSTICK || carte.hunt == Hunt.WART){ //choisir le prochain joueur
-    		System.out.println("----------------------------------") ;
-    		System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
-    		this.turn = scanner.nextInt();
-    		System.out.println("----------------------------------") ;
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("----------------------------------") ;
+    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+        		this.turn = scanner.nextInt();
+        		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
 
     		
     	}
     	else if(carte.hunt == Hunt.DUCKINGSTOOL) {
-    		System.out.println("----------------------------------") ;
-    		System.out.print("Entrez le numéro du joueur que vous voulez choisir : ");
-    		int numJ = scanner.nextInt();
+    		
+    		int numJ = 0;
+    		int action = 0;
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("----------------------------------") ;
+        		System.out.print("Entrez le numéro du joueur que vous voulez choisir : ");
+        		numJ = scanner.nextInt();
+        		if(numJ > 0 && numJ <= nbJoueurTot && this.joueur.get(numJ-1).elimine==false && numJ == numJoueur && (this.joueur.get(numJ-1).revealed==false || this.joueur.get(numJ-1).estVide(this.joueur.get(numJ-1).main)==false)) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
+    		
     		System.out.println("----------------------------------") ;
     		Joueur j1 = this.joueur.get(numJ-1);
-    		System.out.println("Joueur n°"+numJ+" : Révéler votre identité(1) ou supprimer une carte(2) ? ");
-    		if(scanner.nextInt()==1) {
+    		
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("Joueur n°"+numJ+" : Révéler votre identité(1) ou supprimer une carte(2) ? ");
+        		action = scanner.nextInt();
+        		if((action==1 && j1.revealed==false) || (action==2 && j1.estVide(j1.main))) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
+    		if(action==1) {
         		System.out.println("----------------------------------") ;
         		System.out.println("Joueur n°"+numJ+" : vous êtes un "+j1.role);
         		j1.revealed = true;
-        		if(j1.role.equalsIgnoreCase(this.w)) {
+        		if(j1.role.equalsIgnoreCase(w)) {
             		System.out.println("----------------------------------") ;
             		System.out.println("Vous gagnez 1 point et vous prenez le prochain tour") ;
             		j.point++;
         			this.turn=numJoueur;
         		}
-        		else if(j1.role.equalsIgnoreCase(this.v)) {
+        		else if(j1.role.equalsIgnoreCase(v)) {
             		System.out.println("----------------------------------") ;
             		System.out.println("Vous perdez 1 point et il prend le prochain tour") ;
             		j.point--;
+            		if(j.point < 0) { // on vérifie que le score du joueur n'est pas négatif
+        				j.point=0;
+        			}
         			this.turn=numJ;
         		}
-        		System.out.println("----------------------------------") ;
-        		System.out.println("Vos points : "+j.point);
 
     		}
-    		else if(scanner.nextInt()==2) { // il supprime une carte
+    		else if(action==2) { // il supprime une carte
+    			int numCarte = 0;
         		System.out.println("----------------------------------") ;
         		System.out.println(j1) ;
-        		System.out.print("Entrez le numéro de la carte que vous voulez supprimer : ") ;
-        		int numCarte = scanner.nextInt();
+        		
+        		check = false;
+        		
+        		while(check==false) {
+        			System.out.println("----------------------------------") ;
+            		System.out.print("Joueur n°"+numJ+" : Entrez le numéro de la carte que vous voulez supprimer : ") ;
+            		numCarte = scanner.nextInt();
+            		if(numCarte > 0 && numCarte <= j1.main.size()) {
+            			check=true;
+            		}
+            		else {
+            			System.out.println("---------------------------------");
+                    	System.out.println("La saisie est incorrecte");
+                    	System.out.println("---------------------------------");
+            		}
+        		}
     			j1.carteRevelee.add(j1.main.get(numCarte-1));
     			j1.main.remove(numCarte-1);
         		System.out.println("----------------------------------") ;
         		System.out.println("Carte supprimée !!!") ;
-        		System.out.println("----------------------------------") ;
         		System.out.println(j.main);
 
     		}
@@ -453,20 +590,50 @@ public class Partie {
     		System.out.println("----------------------------------") ;
     		System.out.println("Vous devez révéler votre identité : vous êtes un "+j.role);
     		j.revealed = true;
-    		if(j.role.equalsIgnoreCase(this.w)) {
+    		if(j.role.equalsIgnoreCase(w)) {
+    			System.out.println("----------------------------------") ;
+        		System.out.println("Vous êtes witch, vous êtes donc éliminés du round !! Le joueur suivant joue le prochain tour. ");
     			this.turn++;
     			j.elimine = true;
+    			if(this.turn>nbJoueurTot) { // retourner au joueur 1 après le tour du dernier joueur
+        			this.turn = 1;
+        		}
+    			
     		}
     		else {
-    			System.out.println("----------------------------------") ;
-        		System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
-        		this.turn = scanner.nextInt();
+    			check = false;
+        		
+        		while(check==false) {
+        			System.out.println("----------------------------------") ;
+        			System.out.print("Vous êtes villager, entrez le numéro du joueur qui joue le prohain tour : ");
+            		this.turn = scanner.nextInt();
+            		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
+            			check=true;
+            		}
+            		else {
+            			System.out.println("---------------------------------");
+                    	System.out.println("La saisie est incorrecte");
+                    	System.out.println("---------------------------------");
+            		}
+        		}
     		}
     	}
     	else if(carte.hunt == Hunt.EVILEYE) {
-    		System.out.println("----------------------------------") ;
-    		System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
-    		this.turn = scanner.nextInt();
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("----------------------------------") ;
+    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+        		this.turn = scanner.nextInt();
+        		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
     	}
     	else if(carte.hunt == Hunt.BLACKCAT) {
     		if(j.estVide(j.carteRevelee)==false) {
@@ -485,12 +652,28 @@ public class Partie {
     		
     	}
     	else if(carte.hunt == Hunt.PETNEWT) {
-    		System.out.println("----------------------------------") ;
-    		System.out.print("Choisir un joueur pour lui prendre une carte rumeur qu'il a révélé : ");
-    		int numJ = scanner.nextInt();
+    		
+    		int numJ = 0;
+    		
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("----------------------------------") ;
+        		System.out.print("Choisir un joueur pour lui prendre une carte rumeur qu'il a révélé : ");
+        		numJ = scanner.nextInt();
+        		if(numJ > 0 && numJ <= nbJoueurTot && this.joueur.get(numJ-1).elimine==false && numJ != numJoueur) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
+    		
     		Joueur j1 = this.joueur.get(numJ-1);
     		
-    		if(j1.estVide(j.carteRevelee)==false) {
+    		if(j1.estVide(j.carteRevelee)==false) { // si le joueur choisi a révélé une ou plusieurs cartes
     			System.out.println(j1.carteRevelee);
         		System.out.println("----------------------------------") ;
         		System.out.print("Choisir une carte qu'il a révélé (entrez le numéro de la carte : ");
@@ -504,14 +687,26 @@ public class Partie {
     		}
     		else {
     			System.out.println("----------------------------------") ;
-        		System.out.println("Le joueur que vous avez choisi n'a révélé aucune carte ");
+        		System.out.println("Le joueur que vous avez choisi n'a révélé aucune carte !!! Vous venez d'utiliser une carte inutilement. ");
     		}
     		
     		
     		//choisir le prochain joueur
-    		System.out.println("----------------------------------") ;
-    		System.out.print("Choisissez le prochain joueur (numéro) : ");
-    		this.turn = scanner.nextInt();
+    		check = false;
+    		
+    		while(check==false) {
+    			System.out.println("----------------------------------") ;
+    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+        		this.turn = scanner.nextInt();
+        		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
+        			check=true;
+        		}
+        		else {
+        			System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+        		}
+    		}
     		
 
     		}
@@ -527,14 +722,32 @@ public class Partie {
     	System.out.println("Bienvenue dans le Jeu Witch Hunt");
     	System.out.println("---------------------------------");
     	
-    	JeuCartes jeu = new JeuCartes();
-    	System.out.print("Combien de joueurs physiques : ");
-    	int nbJoueur = scanner.nextInt();
-    	System.out.print("Combien de joueurs virtuels : ");
-    	int nbOrdi = scanner.nextInt();
+    	int nbJoueur = 0;
+    	int nbOrdi = 0;
+    	int nbJoueurTot = 0;
+    	check = false;
+    	JeuCartes jeu = null;
+    	while(check == false) {
+    		jeu = new JeuCartes();
+        	System.out.print("Combien de joueurs physiques : ");
+        	nbJoueur = scanner.nextInt();
+        	System.out.print("Combien de joueurs virtuels : ");
+        	nbOrdi = scanner.nextInt();
+        	nbJoueurTot = nbJoueur + nbOrdi ;
+        	if(nbJoueurTot >= 3 && nbJoueurTot <= 6) {
+        		check = true;
+        		
+        	}
+        	else {
+        		System.out.println("---------------------------------");
+            	System.out.println("La saisie est incorrecte");
+            	System.out.println("---------------------------------");
+        	}
+    	}
+    	
+
     	Partie partie = new Partie(nbJoueur, nbOrdi, jeu);
     	
-    	int nbJoueurTot = nbJoueur + nbOrdi ;
     	
     	partie.debutJeu();
     	
@@ -549,8 +762,20 @@ public class Partie {
     	// ----------- boucle de la partie ---------------
     	while (partie.gagne() == 0) { 
     		
-    		System.out.print("Qui commence ? "); // Choisir qui commence au début du jeu
-        	partie.turn=scanner.nextInt();
+    		check = false;
+    		while(check == false) {
+    			System.out.print("Qui commence ? "); // Choisir qui commence au début du jeu
+            	partie.turn=scanner.nextInt();
+            	if(partie.turn > 0 && partie.turn <= nbJoueurTot) {
+            		check = true;
+            	}
+            	else {
+            		System.out.println("---------------------------------");
+                	System.out.println("La saisie est incorrecte");
+                	System.out.println("---------------------------------");
+            	}
+    		}
+    		
         	
         	String test = scanner.nextLine();    	
 
@@ -559,12 +784,22 @@ public class Partie {
         	
     		for(Iterator<Joueur> it = partie.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
     			Joueur j = (Joueur)it.next();
-    			System.out.println("Joueur n° "+j.getNumJoueur()+" - Choisir votre rôle : witch ou villager ?");
-    			String role = scanner.nextLine();
+    			
+    			
+    			check = false;
+        		while(check == false) {
+        			System.out.println("Joueur n° "+j.getNumJoueur()+" - Choisir votre rôle : witch ou villager ?");
+        			j.role = scanner.nextLine();
+                	if(j.role.equalsIgnoreCase(w) || j.role.equalsIgnoreCase(v)) {
+                		check = true;
+                	}
+                	else {
+                		System.out.println("---------------------------------");
+                    	System.out.println("La saisie est incorrecte");
+                    	System.out.println("---------------------------------");
+                	}
+        		}
     	    	System.out.println("---------------------------------");
-        		
-        		
-        		j.setRole(role);
     		}
     		
     		partie.debutRound(nbJoueurTot); // on commence un nouveau round, on distribue les cartes 
@@ -578,17 +813,23 @@ public class Partie {
     			
         		System.out.println(joueurActuel); //afficher le numéro et les cartes du Joueur
         		
-        		partie = joueurActuel.jouer(partie); // le joueur qui a la main joue
+        		partie = joueurActuel.jouer(partie, nbJoueurTot); // le joueur qui a la main joue
         		
         		partie.countJoueurRevele();
         		partie.countJoueurElimine();
         		
-        		
+        		// ------- Récap des points de chaque joueur ----------
+        		System.out.println("Récapitulatif des points de chaque joueur : ");
+        		Iterator<Joueur> it1 = partie.joueur.iterator();
+        		Joueur j1 = null;
+        		while(it1.hasNext()) {
+        			j1 = /*(Joueur)*/it1.next();
+        			System.out.println("Joueur "+j1.numJoueur+" : "+j1.point+" point(s)");
+        		}
+            	System.out.println("--------------------------");
         		/*partie.turn++;
         		
-        		if(partie.turn>nbJoueurTot) { // retourner au joueur 1 après le tour du dernier joueur
-        			partie.turn = 1;
-        		}
+        		
         		
         		*/
         		
