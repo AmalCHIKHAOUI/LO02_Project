@@ -542,7 +542,7 @@ public class Joueur {
     	       while(check==false) {
     	         System.out.println("Joueur n°"+numJ+" : Révéler votre identité(1) ou supprimer une carte(2) ? ");
     	           action = scanner.nextInt();
-    	           if((action==1 && j1.revealed==false) || (action==2 && j1.estVide(j1.main))) {
+    	           if((action==1 && j1.revealed==false) || (action==2 && j1.estVide(j1.main)==false)) {
     	             check=true;
     	           }
     	           else {
