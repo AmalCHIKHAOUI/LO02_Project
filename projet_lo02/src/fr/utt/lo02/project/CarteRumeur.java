@@ -13,7 +13,21 @@ public class CarteRumeur {
 
     
 
+    public boolean  isWitchAgressive() {
+    	boolean agressive = false;
+    	if(this.witch == Witch.ANGRYMOB || this.witch == Witch.INQUISITION) {
+    		agressive = true;
+    	}
+    	return agressive;
+    	
+    }
     
+    public boolean isHuntAgressive(){
+    	boolean agressive = false;
+    	// remplir
+    	
+    	return agressive;
+    }
     public String toString() {
     	StringBuffer sb = new StringBuffer();
     	sb.append("\n-----------------\n");

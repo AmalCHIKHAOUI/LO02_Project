@@ -1,6 +1,6 @@
 package fr.utt.lo02.project;
 
-
+import java.util.*;
 public class Bot extends Joueur {
     private int numBot;
     private Strategie strateg;
@@ -27,10 +27,28 @@ public class Bot extends Joueur {
     	this.strateg=strategie;
     }
     
-   public void jouer()
+   public void chooseRole() {
+	   Random r = new Random();
+	   int choixRole = r.nextInt(2);
+	   
+	   if(choixRole == 0) {
+		   this.role = "witch";
+		   
+	   }else {
+		   this.role = "villager";
+	   }
+   }
+   public Partie jouer(Partie partie, int nbJoueurTot)
    {
-	   strateg.jouer();
-   }    
+	   Partie parti = strateg.jouer(partie, nbJoueurTot, this.numJoueur);
+	   return parti;
+   }  
+   
+   public Partie isAccused(Partie partie, Joueur joueurAccusant)
+   {
+	   Partie parti = strateg.isAccused(partie, joueurAccusant,this.numBot);
+	   return parti;
+   } 
    
    
     private int getNumBot() {
@@ -43,32 +61,12 @@ public class Bot extends Joueur {
         this.numBot = value;
     }
 
-    private boolean victoire;
-
-    private boolean isVictoire() {
-        // Automatically generated method. Please do not modify this code.
-        return this.victoire;
+    public void effetWitch() {
+    	
     }
-
-    private void setVictoire(boolean value) {
-        // Automatically generated method. Please do not modify this code.
-        this.victoire = value;
-    }
-
-    private boolean elimine;
-
-    private boolean isElimine() {
-        // Automatically generated method. Please do not modify this code.
-        return this.elimine;
-    }
-
-    private void setElimine(boolean value) {
-        // Automatically generated method. Please do not modify this code.
-        this.elimine = value;
-    }
-
-    public int point;
-
     
+    public void effetHunt() {
+    	
+    }
 
 }

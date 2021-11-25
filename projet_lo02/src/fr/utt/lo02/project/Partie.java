@@ -62,7 +62,7 @@ public class Partie {
     	    	
     			System.out.println("Tapez 1 pour prudent et tapez 2 pour agressive");
     			int strateg=scanner.nextInt();
-    			Bot nouveauBot = (Bot) new Joueur(i);
+    			Bot nouveauBot = new Bot(i);
     			nouveauBot.setstrateg(strateg);
     			this.joueur.add(nouveauBot);
     		}
@@ -260,7 +260,7 @@ public class Partie {
 
     }
     
-    public void effetWitch(CarteRumeur carte, int numJoueurAccusant, int numJoueurAccuse) {
+/*    public void effetWitch(CarteRumeur carte, int numJoueurAccusant, int numJoueurAccuse) {
 		Joueur j = this.joueur.get(numJoueurAccuse-1); // joueur accusé
 		Joueur j1 = this.joueur.get(numJoueurAccusant-1); // joueur accusant
 
@@ -715,7 +715,7 @@ public class Partie {
 		System.out.println("Au tour du joueur n°"+ this.turn); // on affiche le numéro du prochain joueur
     }
     
-    
+    */
     
     public static void main(String[] args) {
     	System.out.println("---------------------------------");
@@ -784,22 +784,8 @@ public class Partie {
         	
     		for(Iterator<Joueur> it = partie.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
     			Joueur j = (Joueur)it.next();
+    			j.chooseRole();
     			
-    			
-    			check = false;
-        		while(check == false) {
-        			System.out.println("Joueur n° "+j.getNumJoueur()+" - Choisir votre rôle : witch ou villager ?");
-        			j.role = scanner.nextLine();
-                	if(j.role.equalsIgnoreCase(w) || j.role.equalsIgnoreCase(v)) {
-                		check = true;
-                	}
-                	else {
-                		System.out.println("---------------------------------");
-                    	System.out.println("La saisie est incorrecte");
-                    	System.out.println("---------------------------------");
-                	}
-        		}
-    	    	System.out.println("---------------------------------");
     		}
     		
     		partie.debutRound(nbJoueurTot); // on commence un nouveau round, on distribue les cartes 
@@ -809,7 +795,7 @@ public class Partie {
     			
     			joueurActuel = partie.joueur.get(partie.turn -1);
         		
-    			System.out.println("Au tour du joueur n° "+joueurActuel.getNumJoueur());
+    			System.out.println("Au tour du joueur n° "+ joueurActuel.getNumJoueur());
     			
         		System.out.println(joueurActuel); //afficher le numéro et les cartes du Joueur
         		
