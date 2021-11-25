@@ -15,11 +15,11 @@ public class Partie {
     private int nbJoueurRevele;
 
 
-    // constante utilisée pour savoir si un joueur est witch ou villager
+    // constante utilisÃ©e pour savoir si un joueur est witch ou villager
     protected static final String w="witch"; 
     protected static final String v="villager";
     
-    private static boolean check = false; // à utiliser pour vérifier des conditions d'entrée pour l'utilisateur
+    private static boolean check = false; // Ã  utiliser pour vÃ©rifier des conditions d'entrÃ©e pour l'utilisateur
 
     public ArrayList<Joueur> joueur = new ArrayList<Joueur> ();
     public static Scanner scanner = new Scanner(System.in);
@@ -122,7 +122,7 @@ public class Partie {
     
     public void countJoueurElimine() {
     	System.out.println("----------------------------------- ");
-    	System.out.println("Voici les joueurs non éliminés: ");
+    	System.out.println("Voici les joueurs non Ã©liminÃ©s: ");
     	this.nbJoueurElimine = 0;
     	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { 
 			Joueur j = (Joueur)it.next();
@@ -130,7 +130,7 @@ public class Partie {
 				this.nbJoueurElimine++;
 			}
 			else {
-		    	System.out.println("Joueur n°"+j.numJoueur);
+		    	System.out.println("Joueur nÂ°"+j.numJoueur);
 			}
 			
 		}
@@ -139,7 +139,7 @@ public class Partie {
     }
     public void countJoueurRevele() {
     	System.out.println("----------------------------------- ");
-    	System.out.println("Voici les joueurs non révélés : ");
+    	System.out.println("Voici les joueurs non rÃ©vÃ©lÃ©s : ");
     	this.nbJoueurRevele = 0;
     	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { 
 			Joueur j = (Joueur)it.next();
@@ -147,7 +147,7 @@ public class Partie {
 				this.nbJoueurRevele++;
 			}
 			else {
-		    	System.out.println("Joueur n°"+j.numJoueur);
+		    	System.out.println("Joueur nÂ°"+j.numJoueur);
 			}
 			
 		}
@@ -176,22 +176,22 @@ public class Partie {
 
     public void finJeu(int numJoueur) {
     	System.out.println("--------------------------");
-    	System.out.println("Le joueur " + numJoueur + " a gagné");
+    	System.out.println("Le joueur " + numJoueur + " a gagnÃ©");
     	System.out.println("--------------------------");
-    	System.out.println("Le jeu est terminé !!!!!!");
+    	System.out.println("Le jeu est terminÃ© !!!!!!");
     	System.out.println("--------------------------");
     }
-    public void debutRound(int nbJoueur) { // on distribue les cartes à tout les joueurs
+    public void debutRound(int nbJoueur) { // on distribue les cartes Ã  tout les joueurs
     	
-    	this.nbJoueurElimine = 0; // on reset le nb de joueurs éliminés à 0
+    	this.nbJoueurElimine = 0; // on reset le nb de joueurs Ã©liminÃ©s Ã  0
     	this.nbJoueurRevele = 0;
-    	this.jeu.melanger(); // mélanger les cartes
+    	this.jeu.melanger(); // mÃ©langer les cartes
     	int tempNbCarte = 0;
-    	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
+    	for(Iterator<Joueur> it = this.joueur.iterator(); it.hasNext(); ) { //choisir le rÃ´le pour chaque joueur
 			Joueur j = /*(Joueur)*/it.next();
 			
 			j.main.clear();// supprimer toutes les cartes de la main du joueur
-			j.carteRevelee.clear(); // supprimer toutes les cartes faussées du joueur sélectionné
+			j.carteRevelee.clear(); // supprimer toutes les cartes faussÃ©es du joueur sÃ©lectionnÃ©
 			
 			j.elimine = false; // On remet chaque joueur en jeu 
 			j.revealed = false;
@@ -226,7 +226,7 @@ public class Partie {
     }
     
     public void finRound() {
-    	System.out.println("Le round est terminé.");
+    	System.out.println("Le round est terminÃ©.");
     	System.out.println("--------------------------");
     	Joueur joueurRes = null;
     	Joueur j = null;
@@ -238,7 +238,7 @@ public class Partie {
 			}
 		}
 		
-		System.out.println("Le joueur "+j.numJoueur+" est le dernier joueur non révélé du round ");
+		System.out.println("Le joueur "+j.numJoueur+" est le dernier joueur non rÃ©vÃ©lÃ© du round ");
     	System.out.println("--------------------------");
 
 		if(j.role.equalsIgnoreCase(w)) {
@@ -256,12 +256,12 @@ public class Partie {
 		}
 
 		
-		this.round++; // on incrémente l'attribut round
+		this.round++; // on incrÃ©mente l'attribut round
 
     }
     
 /*    public void effetWitch(CarteRumeur carte, int numJoueurAccusant, int numJoueurAccuse) {
-		Joueur j = this.joueur.get(numJoueurAccuse-1); // joueur accusé
+		Joueur j = this.joueur.get(numJoueurAccuse-1); // joueur accusÃ©
 		Joueur j1 = this.joueur.get(numJoueurAccusant-1); // joueur accusant
 
     	if(carte.witch == Witch.ANGRYMOB || carte.witch == Witch.BROOMSTICK || carte.witch == Witch.WART || carte.witch == Witch.TOAD || carte.witch == Witch.BLACKCAT || carte.witch == Witch.PETNEWT) { //prendre le prochain tour
@@ -269,19 +269,19 @@ public class Partie {
     		System.out.println("------------------------");
     		this.turn = numJoueurAccuse;
     	}
-    	else if(carte.witch == Witch.INQUISITION){ // reprendre carte révélée
+    	else if(carte.witch == Witch.INQUISITION){ // reprendre carte rÃ©vÃ©lÃ©e
     		if(j.estVide(j.main)==false) {
-    			System.out.println("Vous reprenez une carte que vous avez révélé");
+    			System.out.println("Vous reprenez une carte que vous avez rÃ©vÃ©lÃ©");
         		System.out.println("------------------------");
         		j.main.add(j.carteRevelee.get(0));
-        		j.carteRevelee.remove(0); // on enlève la carte des cartes révélées
-        		System.out.println("Voici votre main à présent : ");
+        		j.carteRevelee.remove(0); // on enlÃ¨ve la carte des cartes rÃ©vÃ©lÃ©es
+        		System.out.println("Voici votre main Ã  prÃ©sent : ");
         		System.out.println(j.main);
         		System.out.println("------------------------");
         		
     		}
     		else {
-    			System.out.println("Vous n'avez révélé aucune carte");
+    			System.out.println("Vous n'avez rÃ©vÃ©lÃ© aucune carte");
         		System.out.println("------------------------");
     		}
     		
@@ -290,12 +290,12 @@ public class Partie {
     	}
     	else if(carte.witch == Witch.POINTEDHAT){ // prendre une carte de l'adversaire
     		
-    		if(j1.estVide(j1.main) == false && j1.main.size() > 1 ) { // le joueur accusé peut prendre une carte si la main de l'adversaire n'est pas vide 
+    		if(j1.estVide(j1.main) == false && j1.main.size() > 1 ) { // le joueur accusÃ© peut prendre une carte si la main de l'adversaire n'est pas vide 
     			System.out.println("Vous prenez une carte au hasard du joueur accusant");
         		System.out.println("------------------------");
     			j.main.add(j1.main.get(0));
-        		j1.main.remove(0); // on enlève la carte de la main du joueur accusant
-        		System.out.println("Voici votre main à présent :");
+        		j1.main.remove(0); // on enlÃ¨ve la carte de la main du joueur accusant
+        		System.out.println("Voici votre main Ã  prÃ©sent :");
         		System.out.println("------------------------");
         		System.out.println(j.main);
         		System.out.println("------------------------");
@@ -311,7 +311,7 @@ public class Partie {
     	else if(carte.witch == Witch.DUCKINGSTOOL || carte.witch == Witch.EVILEYE){ //choisir le prochain joueur
     		check = false;
     		while(check==false) {
-    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+    			System.out.print("Entrez le numÃ©ro du joueur qui joue le prohain tour : ");
         		this.turn = scanner.nextInt();
         		if(this.turn != numJoueurAccuse && this.turn > 0 && this.turn <= (this.nbOrdi + this.nbJoueur) && this.joueur.get(this.turn-1).elimine==false) {
         			check=true;
@@ -334,7 +334,7 @@ public class Partie {
     			j1.melanger();
         		j1.carteRevelee.add(j1.main.get(0));
         		j1.main.remove(0);
-        		System.out.println("Voici la main du joueur accusé après avoir jeté une carte : ");
+        		System.out.println("Voici la main du joueur accusÃ© aprÃ¨s avoir jetÃ© une carte : ");
         		System.out.println(j1.main);
         		System.out.println("------------------------");
     		}
@@ -355,13 +355,13 @@ public class Partie {
 		Joueur j = this.joueur.get(numJoueur-1);
 		int nbJoueurTot = this.nbJoueur + this.nbOrdi;
 
-    	if(carte.hunt == Hunt.ANGRYMOB){ // révéler la carte d'un autre joueur
+    	if(carte.hunt == Hunt.ANGRYMOB){ // rÃ©vÃ©ler la carte d'un autre joueur
     		int numJoueurChoisi = 0;
     		check = false;
     		
     		while(check==false) {
     			System.out.println("------------------------");
-        		System.out.print("Entrer le numéro du joueur dont vous voulez révéler l'identité :");
+        		System.out.print("Entrer le numÃ©ro du joueur dont vous voulez rÃ©vÃ©ler l'identitÃ© :");
         		numJoueurChoisi = scanner.nextInt();
         		if(numJoueurChoisi > 0 && numJoueurChoisi <= nbJoueurTot && this.joueur.get(numJoueurChoisi-1).revealed==false) {
         			check=true;
@@ -377,7 +377,7 @@ public class Partie {
     		System.out.println("------------------------");
     		System.out.println("Le joueur que vous avez choisi est ... un "+ j1.role);
 
-    		j1.revealed = true; // le joueur a révélé son identité
+    		j1.revealed = true; // le joueur a rÃ©vÃ©lÃ© son identitÃ©
     		if(j1.role.equalsIgnoreCase(w)) {
         		System.out.println("------------------------");
     			System.out.println("Vous gagnez 2 points et vous jouez le prochain tour");
@@ -389,10 +389,10 @@ public class Partie {
         		System.out.println("------------------------");
     			System.out.println("Vous perdez 2 points et le joueur choisi prend le prochain tour");
     			j.point-=2;
-    			if(j.point < 0) { // on vérifie que le score du joueur n'est pas négatif
+    			if(j.point < 0) { // on vÃ©rifie que le score du joueur n'est pas nÃ©gatif
     				j.point=0;
     			}
-    			this.turn = j1.numJoueur; // on donne la main au joueur dont l'identité a été révélé
+    			this.turn = j1.numJoueur; // on donne la main au joueur dont l'identitÃ© a Ã©tÃ© rÃ©vÃ©lÃ©
     		}
 
     	}
@@ -402,7 +402,7 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+    			System.out.print("Entrez le numÃ©ro du joueur qui joue le prohain tour : ");
         		this.turn = scanner.nextInt();
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
@@ -414,18 +414,18 @@ public class Partie {
         		}
     		}
     		System.out.println("----------------------------------") ;
-    		System.out.println("Voici l'identité du joueur que vous avez choisi (à regarder discrètement) : "+this.joueur.get(this.turn-1).role) ;
+    		System.out.println("Voici l'identitÃ© du joueur que vous avez choisi (Ã  regarder discrÃ¨tement) : "+this.joueur.get(this.turn-1).role) ;
 
     	}
     	else if(carte.hunt==Hunt.POINTEDHAT) {
     		System.out.println("----------------------------------") ;
-			System.out.println("L'effet Hunt de cette carte vous permet donc de reprendre une de vos cartes révélées");
+			System.out.println("L'effet Hunt de cette carte vous permet donc de reprendre une de vos cartes rÃ©vÃ©lÃ©es");
 			if(j.estVide(j.carteRevelee)==true) {
 	    		System.out.println("----------------------------------") ;
-				System.out.println("Vous n'avez pas encore révélé de cartes ! ");
+				System.out.println("Vous n'avez pas encore rÃ©vÃ©lÃ© de cartes ! ");
 			}
 			else {
-				j.main.add(j.carteRevelee.get(0)); // on insère la carte révélée dans votre main
+				j.main.add(j.carteRevelee.get(0)); // on insÃ¨re la carte rÃ©vÃ©lÃ©e dans votre main
 				j.carteRevelee.remove(0);
 			}
     		
@@ -433,7 +433,7 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+    			System.out.print("Entrez le numÃ©ro du joueur qui joue le prohain tour : ");
         		this.turn = scanner.nextInt();
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
@@ -445,7 +445,7 @@ public class Partie {
         		}
     		}
     		System.out.println("----------------------------------") ;
-    		System.out.println("Voici l'identité du joueur que vous avez choisi (à regarder discrètement) : "+this.joueur.get(this.turn-1).role) ;
+    		System.out.println("Voici l'identitÃ© du joueur que vous avez choisi (Ã  regarder discrÃ¨tement) : "+this.joueur.get(this.turn-1).role) ;
 
     	}
     	else if(carte.hunt==Hunt.HOOKEDNOSE) {
@@ -453,7 +453,7 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+    			System.out.print("Entrez le numÃ©ro du joueur qui joue le prohain tour : ");
         		this.turn = scanner.nextInt();
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
@@ -465,14 +465,14 @@ public class Partie {
         		}
     		}
     		System.out.println("----------------------------------") ;
-    		System.out.println("Vous avez la possibilité de lui prendre une carte aléatoire") ;
+    		System.out.println("Vous avez la possibilitÃ© de lui prendre une carte alÃ©atoire") ;
     		Joueur j1 = this.joueur.get(this.turn-1);
     		if(j1.estVide(j1.main)==false) {
-    			j.melanger(); // mélanger les cartes du joueur
-    			j.main.add(j1.main.get(0)); // le joueur j prend une carte aléatoire à j1
+    			j.melanger(); // mÃ©langer les cartes du joueur
+    			j.main.add(j1.main.get(0)); // le joueur j prend une carte alÃ©atoire Ã  j1
     			j1.main.remove(0);
     			System.out.println("----------------------------------") ;
-        		System.out.println("Vous lui avez pris une carte avec succès !!!!") ;
+        		System.out.println("Vous lui avez pris une carte avec succÃ¨s !!!!") ;
     		}
     		else {
     			System.out.println("----------------------------------") ;
@@ -485,7 +485,7 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+    			System.out.print("Entrez le numÃ©ro du joueur qui joue le prohain tour : ");
         		this.turn = scanner.nextInt();
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
@@ -507,9 +507,9 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("----------------------------------") ;
-        		System.out.print("Entrez le numéro du joueur que vous voulez choisir : ");
+        		System.out.print("Entrez le numÃ©ro du joueur que vous voulez choisir : ");
         		numJ = scanner.nextInt();
-        		if(numJ > 0 && numJ <= nbJoueurTot && this.joueur.get(numJ-1).elimine==false && numJ == numJoueur && (this.joueur.get(numJ-1).revealed==false || this.joueur.get(numJ-1).estVide(this.joueur.get(numJ-1).main)==false)) {
+        		if(numJ > 0 && numJ <= nbJoueurTot && this.joueur.get(numJ-1).elimine==false && numJ != numJoueur && (this.joueur.get(numJ-1).revealed==false || this.joueur.get(numJ-1).estVide(this.joueur.get(numJ-1).main)==false)) {
         			check=true;
         		}
         		else {
@@ -525,7 +525,7 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("Joueur n°"+numJ+" : Révéler votre identité(1) ou supprimer une carte(2) ? ");
+    			System.out.println("Joueur nÂ°"+numJ+" : RÃ©vÃ©ler votre identitÃ©(1) ou supprimer une carte(2) ? ");
         		action = scanner.nextInt();
         		if((action==1 && j1.revealed==false) || (action==2 && j1.estVide(j1.main))) {
         			check=true;
@@ -538,7 +538,7 @@ public class Partie {
     		}
     		if(action==1) {
         		System.out.println("----------------------------------") ;
-        		System.out.println("Joueur n°"+numJ+" : vous êtes un "+j1.role);
+        		System.out.println("Joueur nÂ°"+numJ+" : vous Ãªtes un "+j1.role);
         		j1.revealed = true;
         		if(j1.role.equalsIgnoreCase(w)) {
             		System.out.println("----------------------------------") ;
@@ -550,7 +550,7 @@ public class Partie {
             		System.out.println("----------------------------------") ;
             		System.out.println("Vous perdez 1 point et il prend le prochain tour") ;
             		j.point--;
-            		if(j.point < 0) { // on vérifie que le score du joueur n'est pas négatif
+            		if(j.point < 0) { // on vÃ©rifie que le score du joueur n'est pas nÃ©gatif
         				j.point=0;
         			}
         			this.turn=numJ;
@@ -566,7 +566,7 @@ public class Partie {
         		
         		while(check==false) {
         			System.out.println("----------------------------------") ;
-            		System.out.print("Joueur n°"+numJ+" : Entrez le numéro de la carte que vous voulez supprimer : ") ;
+            		System.out.print("Joueur nÂ°"+numJ+" : Entrez le numÃ©ro de la carte que vous voulez supprimer : ") ;
             		numCarte = scanner.nextInt();
             		if(numCarte > 0 && numCarte <= j1.main.size()) {
             			check=true;
@@ -580,7 +580,7 @@ public class Partie {
     			j1.carteRevelee.add(j1.main.get(numCarte-1));
     			j1.main.remove(numCarte-1);
         		System.out.println("----------------------------------") ;
-        		System.out.println("Carte supprimée !!!") ;
+        		System.out.println("Carte supprimÃ©e !!!") ;
         		System.out.println(j.main);
 
     		}
@@ -588,14 +588,14 @@ public class Partie {
     	}
     	else if(carte.hunt == Hunt.CAULDRON || carte.hunt == Hunt.TOAD) { 
     		System.out.println("----------------------------------") ;
-    		System.out.println("Vous devez révéler votre identité : vous êtes un "+j.role);
+    		System.out.println("Vous devez rÃ©vÃ©ler votre identitÃ© : vous Ãªtes un "+j.role);
     		j.revealed = true;
     		if(j.role.equalsIgnoreCase(w)) {
     			System.out.println("----------------------------------") ;
-        		System.out.println("Vous êtes witch, vous êtes donc éliminés du round !! Le joueur suivant joue le prochain tour. ");
+        		System.out.println("Vous Ãªtes witch, vous Ãªtes donc Ã©liminÃ©s du round !! Le joueur suivant joue le prochain tour. ");
     			this.turn++;
     			j.elimine = true;
-    			if(this.turn>nbJoueurTot) { // retourner au joueur 1 après le tour du dernier joueur
+    			if(this.turn>nbJoueurTot) { // retourner au joueur 1 aprÃ¨s le tour du dernier joueur
         			this.turn = 1;
         		}
     			
@@ -605,7 +605,7 @@ public class Partie {
         		
         		while(check==false) {
         			System.out.println("----------------------------------") ;
-        			System.out.print("Vous êtes villager, entrez le numéro du joueur qui joue le prohain tour : ");
+        			System.out.print("Vous Ãªtes villager, entrez le numÃ©ro du joueur qui joue le prohain tour : ");
             		this.turn = scanner.nextInt();
             		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
             			check=true;
@@ -623,7 +623,7 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+    			System.out.print("Entrez le numÃ©ro du joueur qui joue le prohain tour : ");
         		this.turn = scanner.nextInt();
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
@@ -638,12 +638,12 @@ public class Partie {
     	else if(carte.hunt == Hunt.BLACKCAT) {
     		if(j.estVide(j.carteRevelee)==false) {
     			System.out.println("----------------------------------") ;
-        		System.out.println("Voici les cartes supprimées : ");
+        		System.out.println("Voici les cartes supprimÃ©es : ");
         		System.out.println(j.carteRevelee);
     		}
     		else {
     			System.out.println("----------------------------------") ;
-        		System.out.println("Vous avez choisi n'a révélé aucune carte ");
+        		System.out.println("Vous avez choisi n'a rÃ©vÃ©lÃ© aucune carte ");
     		}
     		System.out.println("----------------------------------") ;
     		System.out.println("Vous prenez le prochain tour");
@@ -659,7 +659,7 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("----------------------------------") ;
-        		System.out.print("Choisir un joueur pour lui prendre une carte rumeur qu'il a révélé : ");
+        		System.out.print("Choisir un joueur pour lui prendre une carte rumeur qu'il a rÃ©vÃ©lÃ© : ");
         		numJ = scanner.nextInt();
         		if(numJ > 0 && numJ <= nbJoueurTot && this.joueur.get(numJ-1).elimine==false && numJ != numJoueur) {
         			check=true;
@@ -673,21 +673,21 @@ public class Partie {
     		
     		Joueur j1 = this.joueur.get(numJ-1);
     		
-    		if(j1.estVide(j.carteRevelee)==false) { // si le joueur choisi a révélé une ou plusieurs cartes
+    		if(j1.estVide(j.carteRevelee)==false) { // si le joueur choisi a rÃ©vÃ©lÃ© une ou plusieurs cartes
     			System.out.println(j1.carteRevelee);
         		System.out.println("----------------------------------") ;
-        		System.out.print("Choisir une carte qu'il a révélé (entrez le numéro de la carte : ");
+        		System.out.print("Choisir une carte qu'il a rÃ©vÃ©lÃ© (entrez le numÃ©ro de la carte : ");
         		int numCarte = scanner.nextInt();
-        		j.main.add(j1.carteRevelee.get(numCarte-1)); // le joueur prend la carte révélé d'un autre joueur
+        		j.main.add(j1.carteRevelee.get(numCarte-1)); // le joueur prend la carte rÃ©vÃ©lÃ© d'un autre joueur
         		j1.carteRevelee.remove(numCarte-1);
         		System.out.println("----------------------------------") ;
-        		System.out.println("Vous avez pris sa carte révélée avec succès !!! ");
+        		System.out.println("Vous avez pris sa carte rÃ©vÃ©lÃ©e avec succÃ¨s !!! ");
         		System.out.println("----------------------------------") ;
         		System.out.println(j.main);
     		}
     		else {
     			System.out.println("----------------------------------") ;
-        		System.out.println("Le joueur que vous avez choisi n'a révélé aucune carte !!! Vous venez d'utiliser une carte inutilement. ");
+        		System.out.println("Le joueur que vous avez choisi n'a rÃ©vÃ©lÃ© aucune carte !!! Vous venez d'utiliser une carte inutilement. ");
     		}
     		
     		
@@ -696,7 +696,7 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numéro du joueur qui joue le prohain tour : ");
+    			System.out.print("Entrez le numÃ©ro du joueur qui joue le prohain tour : ");
         		this.turn = scanner.nextInt();
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
@@ -712,7 +712,7 @@ public class Partie {
     		}
 
     	System.out.println("----------------------------------") ;
-		System.out.println("Au tour du joueur n°"+ this.turn); // on affiche le numéro du prochain joueur
+		System.out.println("Au tour du joueur nÂ°"+ this.turn); // on affiche le numÃ©ro du prochain joueur
     }
     
     */
@@ -764,7 +764,7 @@ public class Partie {
     		
     		check = false;
     		while(check == false) {
-    			System.out.print("Qui commence ? "); // Choisir qui commence au début du jeu
+    			System.out.print("Qui commence ? "); // Choisir qui commence au dÃ©but du jeu
             	partie.turn=scanner.nextInt();
             	if(partie.turn > 0 && partie.turn <= nbJoueurTot) {
             		check = true;
@@ -780,9 +780,9 @@ public class Partie {
         	String test = scanner.nextLine();    	
 
         	
-        	System.out.println("--------------- Début du Round "+partie.round+" ------------------");
+        	System.out.println("--------------- DÃ©but du Round "+partie.round+" ------------------");
         	
-    		for(Iterator<Joueur> it = partie.joueur.iterator(); it.hasNext(); ) { //choisir le rôle pour chaque joueur
+    		for(Iterator<Joueur> it = partie.joueur.iterator(); it.hasNext(); ) { //choisir le rÃ´le pour chaque joueur
     			Joueur j = (Joueur)it.next();
     			j.chooseRole();
     			
@@ -791,21 +791,21 @@ public class Partie {
     		partie.debutRound(nbJoueurTot); // on commence un nouveau round, on distribue les cartes 
     		
     		// ----------- boucle du round ---------------
-    		while(partie.nbJoueurRevele < nbJoueurTot-1 && partie.gagne() == 0) { // on vérifie qu'il reste assez de joueur pour jouer le round et on vérifie si un joueur a atteint le nombre de points max
+    		while(partie.nbJoueurRevele < nbJoueurTot-1 && partie.gagne() == 0) { // on vÃ©rifie qu'il reste assez de joueur pour jouer le round et on vÃ©rifie si un joueur a atteint le nombre de points max
     			
     			joueurActuel = partie.joueur.get(partie.turn -1);
         		
-    			System.out.println("Au tour du joueur n° "+ joueurActuel.getNumJoueur());
+    			System.out.println("Au tour du joueur nÂ° "+ joueurActuel.getNumJoueur());
     			
-        		System.out.println(joueurActuel); //afficher le numéro et les cartes du Joueur
+        		System.out.println(joueurActuel); //afficher le numÃ©ro et les cartes du Joueur
         		
         		partie = joueurActuel.jouer(partie, nbJoueurTot); // le joueur qui a la main joue
         		
         		partie.countJoueurRevele();
         		partie.countJoueurElimine();
         		
-        		// ------- Récap des points de chaque joueur ----------
-        		System.out.println("Récapitulatif des points de chaque joueur : ");
+        		// ------- RÃ©cap des points de chaque joueur ----------
+        		System.out.println("RÃ©capitulatif des points de chaque joueur : ");
         		Iterator<Joueur> it1 = partie.joueur.iterator();
         		Joueur j1 = null;
         		while(it1.hasNext()) {
@@ -821,7 +821,7 @@ public class Partie {
         		
     		}
     		
-    		// Fin du round : on distribue les points au joueur restant non révélé
+    		// Fin du round : on distribue les points au joueur restant non rÃ©vÃ©lÃ©
     		
     		partie.finRound();
     		
