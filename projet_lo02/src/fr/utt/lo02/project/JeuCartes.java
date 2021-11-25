@@ -18,12 +18,12 @@ public class JeuCartes {
 		}
 	}
 	
-	// retire la première carte du tas de cartes
+	// retire la premiere carte du tas de cartes
 	public CarteRumeur distribuerUneCarte(int i){ 
 		return this.tasCartes.get(i);
 	}
 	
-	// Mélange de toutes les cartes. Appel de la méthode statique shuffle de la classe Collections
+	// Melange de toutes les cartes. Appel de la methode statique shuffle de la classe Collections
 	public void melanger(){
 		Collections.shuffle(this.tasCartes);
 	}
