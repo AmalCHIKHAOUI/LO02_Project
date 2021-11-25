@@ -239,7 +239,7 @@ public class Partie {
 		}
 		
 		System.out.println("Le joueur "+j.numJoueur+" est le dernier joueur non révélé du round ");
-    	System.out.println("--------------------------");
+    		System.out.println("--------------------------");
 
 		if(j.role.equalsIgnoreCase(w)) {
 			j.point += 2;
@@ -254,6 +254,16 @@ public class Partie {
 
 
 		}
+	    	// ------- Récap des points de chaque joueur ----------
+		System.out.println("Récapitulatif des points de chaque joueur : ");
+		Iterator<Joueur> it1 = this.joueur.iterator();
+		Joueur j1 = null;
+		while(it1.hasNext()) {
+			j1 = /*(Joueur)*/it1.next();
+			System.out.println("Joueur "+j1.numJoueur+" : "+j1.point+" point(s)");
+		}
+    		System.out.println("--------------------------");
+
 
 		
 		this.round++; // on incrémente l'attribut round
