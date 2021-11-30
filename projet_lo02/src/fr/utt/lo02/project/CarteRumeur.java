@@ -14,20 +14,23 @@ public class CarteRumeur {
     
 
     public boolean  isWitchAgressive() {
-    	boolean agressive = false;
+    	boolean agressivew = false;
     	if(this.witch == Witch.ANGRYMOB || this.witch == Witch.INQUISITION) {
-    		agressive = true;
+    		agressivew = true;
     	}
-    	return agressive;
+    	return agressivew;
     	
     }
     
     public boolean isHuntAgressive(){
-    	boolean agressive = false;
-    	// remplir
-    	
-    	return agressive;
+    	boolean agressiveh = false;
+    	if (this.hunt == Hunt.ANGRYMOB || this.hunt== Hunt.HOOKEDNOSE || this.hunt == Hunt.DUCKINGSTOOL || this.hunt== Hunt.PETNEWT)
+    	{
+    		agressiveh=true;
+    	}
+    	return agressiveh;
     }
+    
     public String toString() {
     	StringBuffer sb = new StringBuffer();
     	sb.append("\n-----------------\n");

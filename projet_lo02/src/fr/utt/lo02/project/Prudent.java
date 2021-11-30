@@ -10,7 +10,7 @@ public class Prudent implements Strategie {
 		while (check==false)
 		{
 			numJoueurAccuse = r.nextInt(nbJoueurTot);	
-			if (numJoueurAccuse != (numBot - 1))
+			if (numJoueurAccuse != (numBot - 1) && (partie.joueur.get(numJoueurAccuse).isElimine() == false) && (partie.joueur.get(numJoueurAccuse).isRevealed() == false))
 			{
 				check=true;
 			}
@@ -38,7 +38,7 @@ public class Prudent implements Strategie {
     		System.out.println("-------------------------------------------------------------");
     		System.out.println(" Je revele une carte rumeur \n " + bot.main.get(0) );
     		System.out.println("-------------------------------------------------------------");
-    		bot.effetWitch(partie, bot.main.get(0), joueurAccusant.getNumJoueur(), numBot);
+    		partie.effetWitch(bot.main.get(0), joueurAccusant.getNumJoueur(), numBot);
     		bot.carteRevelee.add(bot.main.get(0)); // supprimer la carte jouée après l'avoir activé
     		bot.main.remove(0);
     	}

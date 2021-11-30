@@ -269,7 +269,7 @@ public class Partie {
 
     }
     
-/*    public void effetWitch(CarteRumeur carte, int numJoueurAccusant, int numJoueurAccuse) {
+    public void effetWitch(CarteRumeur carte, int numJoueurAccusant, int numJoueurAccuse) {
 		Joueur j = this.joueur.get(numJoueurAccuse-1); // joueur accuse
 		Joueur j1 = this.joueur.get(numJoueurAccusant-1); // joueur accusant
 
@@ -279,7 +279,7 @@ public class Partie {
     		this.turn = numJoueurAccuse;
     	}
     	else if(carte.witch == Witch.INQUISITION){ // reprendre carte revelee
-    		if(j.estVide(j.main)==false) {
+    		if(j.estVide(j.carteRevelee)==false) {
     			System.out.println("Vous reprenez une carte que vous avez revele");
         		System.out.println("------------------------");
         		j.main.add(j.carteRevelee.get(0));
@@ -321,13 +321,22 @@ public class Partie {
     		check = false;
     		while(check==false) {
     			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
-        		this.turn = scanner.nextInt();
+        		
+        		if (!(j instanceof Bot )) {
+    				// le joueur est physique
+    				this.turn = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				
+    				Bot bot = (Bot)j;
+    				bot.chooseNextPlayer(this);
+    			}
         		if(this.turn != numJoueurAccuse && this.turn > 0 && this.turn <= (this.nbOrdi + this.nbJoueur) && this.joueur.get(this.turn-1).elimine==false) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 1 ");
                 	System.out.println("---------------------------------");
         		}
     		}
@@ -371,13 +380,21 @@ public class Partie {
     		while(check==false) {
     			System.out.println("------------------------");
         		System.out.print("Entrer le numero du joueur dont vous voulez reveler l'identite :");
-        		numJoueurChoisi = scanner.nextInt();
+        	
+        		if (!(j instanceof Bot )) {
+    				// le joueur est physique
+        			numJoueurChoisi = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				Bot bot = (Bot)j;
+    				numJoueurChoisi = bot.chooseRandomPlayer(this);
+    			}
         		if(numJoueurChoisi > 0 && numJoueurChoisi <= nbJoueurTot && this.joueur.get(numJoueurChoisi-1).revealed==false) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 2");
                 	System.out.println("---------------------------------");
         		}
     		}
@@ -412,18 +429,26 @@ public class Partie {
     		while(check==false) {
     			System.out.println("----------------------------------") ;
     			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
-        		this.turn = scanner.nextInt();
+    			if (!(j instanceof Bot )) {
+    				// le joueur est physique
+    				this.turn = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				
+    				Bot bot = (Bot)j;
+    				bot.chooseNextPlayer(this);
+    			}
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 3");
                 	System.out.println("---------------------------------");
         		}
     		}
     		System.out.println("----------------------------------") ;
-    		System.out.println("Voici l'identite du joueur que vous avez choisi (à regarder discretement) : "+this.joueur.get(this.turn-1).role) ;
+    		System.out.println("Voici l'identite du joueur que vous avez choisi (A regarder discretement) : "+this.joueur.get(this.turn-1).role) ;
 
     	}
     	else if(carte.hunt==Hunt.POINTEDHAT) {
@@ -443,13 +468,22 @@ public class Partie {
     		while(check==false) {
     			System.out.println("----------------------------------") ;
     			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
-        		this.turn = scanner.nextInt();
+    			
+    			if (!(j instanceof Bot )) {
+    				// le joueur est physique
+    				this.turn = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				
+    				Bot bot = (Bot)j;
+    				bot.chooseNextPlayer(this);
+    			}
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 4 ");
                 	System.out.println("---------------------------------");
         		}
     		}
@@ -463,13 +497,22 @@ public class Partie {
     		while(check==false) {
     			System.out.println("----------------------------------") ;
     			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
-        		this.turn = scanner.nextInt();
+    			if (!(j instanceof Bot )) {
+    				// le joueur est physique
+    				this.turn = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				
+    				Bot bot = (Bot)j;
+    				bot.chooseNextPlayer(this);
+    			}
+        		
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 5 ");
                 	System.out.println("---------------------------------");
         		}
     		}
@@ -495,13 +538,21 @@ public class Partie {
     		while(check==false) {
     			System.out.println("----------------------------------") ;
     			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
-        		this.turn = scanner.nextInt();
+    			if (!(j instanceof Bot )) {
+    				// le joueur est physique
+    				this.turn = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				
+    				Bot bot = (Bot)j;
+    				bot.chooseNextPlayer(this);
+    			}
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 6 ");
                 	System.out.println("---------------------------------");
         		}
     		}
@@ -517,13 +568,20 @@ public class Partie {
     		while(check==false) {
     			System.out.println("----------------------------------") ;
         		System.out.print("Entrez le numero du joueur que vous voulez choisir : ");
-        		numJ = scanner.nextInt();
+        		if (!(j instanceof Bot )) {
+    				// le joueur est physique
+        			numJ = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				Bot bot = (Bot)j;
+    				numJ = bot.chooseRandomPlayer(this);
+    			}
         		if(numJ > 0 && numJ <= nbJoueurTot && this.joueur.get(numJ-1).elimine==false && numJ != numJoueur && (this.joueur.get(numJ-1).revealed==false || this.joueur.get(numJ-1).estVide(this.joueur.get(numJ-1).main)==false)) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 7 ");
                 	System.out.println("---------------------------------");
         		}
     		}
@@ -535,19 +593,27 @@ public class Partie {
     		
     		while(check==false) {
     			System.out.println("Joueur "+numJ+" : Reveler votre identite(1) ou supprimer une carte(2) ? ");
-        		action = scanner.nextInt();
-        		if((action==1 && j1.revealed==false) || (action==2 && j1.estVide(j1.main))) {
+    			if (!(j1 instanceof Bot )) {
+    				// le joueur est physique
+        			action = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				Bot bot = (Bot)j1;
+    				action = bot.revealOrDelete() ;
+    			}
+    			
+        		if((action==1 && j1.revealed==false) || (action==2 && j1.estVide(j1.main)) || action == 3) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 8");
                 	System.out.println("---------------------------------");
         		}
     		}
     		if(action==1) {
         		System.out.println("----------------------------------") ;
-        		System.out.println("Joueur "+numJ+" : vous êtes un "+j1.role);
+        		System.out.println("Joueur "+numJ+" : vous etes un "+j1.role);
         		j1.revealed = true;
         		if(j1.role.equalsIgnoreCase(w)) {
             		System.out.println("----------------------------------") ;
@@ -577,12 +643,21 @@ public class Partie {
         			System.out.println("----------------------------------") ;
             		System.out.print("Joueur "+numJ+" : Entrez le numero de la carte que vous voulez supprimer : ") ;
             		numCarte = scanner.nextInt();
+            		if (!(j instanceof Bot )) {
+        				// le joueur est physique
+            			numCarte = scanner.nextInt();
+        			} else {
+        				// le joueur est un bot
+        				Bot bot = (Bot)j;
+        				numCarte = bot.chooseCard() ;
+        			}
+            		
             		if(numCarte > 0 && numCarte <= j1.main.size()) {
             			check=true;
             		}
             		else {
             			System.out.println("---------------------------------");
-                    	System.out.println("La saisie est incorrecte");
+                    	System.out.println("La saisie est incorrecte 9 ");
                     	System.out.println("---------------------------------");
             		}
         		}
@@ -592,6 +667,10 @@ public class Partie {
         		System.out.println("Carte supprimee !!!") ;
         		System.out.println(j.main);
 
+    		}else {
+    			System.out.println("---------------------------------");
+            	System.out.println("Le joueur selectionne est deja revele et n'a plus de cartes a la main ");
+            	System.out.println("---------------------------------");
     		}
     		
     	}
@@ -615,13 +694,22 @@ public class Partie {
         		while(check==false) {
         			System.out.println("----------------------------------") ;
         			System.out.print("Vous êtes villager, entrez le numero du joueur qui joue le prohain tour : ");
-            		this.turn = scanner.nextInt();
+        			if (!(j instanceof Bot )) {
+        				// le joueur est physique
+        				this.turn = scanner.nextInt();
+        			} else {
+        				// le joueur est un bot
+        				
+        				Bot bot = (Bot)j;
+        				bot.chooseNextPlayer(this);
+        			}
+        			
             		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
             			check=true;
             		}
             		else {
             			System.out.println("---------------------------------");
-                    	System.out.println("La saisie est incorrecte");
+                    	System.out.println("La saisie est incorrecte 10 ");
                     	System.out.println("---------------------------------");
             		}
         		}
@@ -633,13 +721,22 @@ public class Partie {
     		while(check==false) {
     			System.out.println("----------------------------------") ;
     			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
-        		this.turn = scanner.nextInt();
+    			if (!(j instanceof Bot )) {
+    				// le joueur est physique
+    				this.turn = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				
+    				Bot bot = (Bot)j;
+    				bot.chooseNextPlayer(this);
+    			}
+        		
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 11");
                 	System.out.println("---------------------------------");
         		}
     		}
@@ -669,24 +766,41 @@ public class Partie {
     		while(check==false) {
     			System.out.println("----------------------------------") ;
         		System.out.print("Choisir un joueur pour lui prendre une carte rumeur qu'il a revele : ");
-        		numJ = scanner.nextInt();
+        		
+        		if (!(j instanceof Bot )) {
+    				// le joueur est physique
+        			numJ = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				Bot bot = (Bot)j;
+    				numJ = bot.chooseRandomPlayer(this);
+    			}
         		if(numJ > 0 && numJ <= nbJoueurTot && this.joueur.get(numJ-1).elimine==false && numJ != numJoueur) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 12 ");
                 	System.out.println("---------------------------------");
         		}
     		}
     		
     		Joueur j1 = this.joueur.get(numJ-1);
     		
-    		if(j1.estVide(j.carteRevelee)==false) { // si le joueur choisi a revele une ou plusieurs cartes
+    		if(j1.estVide(j1.carteRevelee)==false) { // si le joueur choisi a revele une ou plusieurs cartes
     			System.out.println(j1.carteRevelee);
         		System.out.println("----------------------------------") ;
         		System.out.print("Choisir une carte qu'il a revele (entrez le numero de la carte : ");
-        		int numCarte = scanner.nextInt();
+        		int numCarte;
+        		if (!(j instanceof Bot )) {
+    				// le joueur est physique
+        			numCarte = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				Bot bot = (Bot)j;
+    				numCarte = bot.pickRevealedCard(j1);
+    			}
+        		
         		j.main.add(j1.carteRevelee.get(numCarte-1)); // le joueur prend la carte revele d'un autre joueur
         		j1.carteRevelee.remove(numCarte-1);
         		System.out.println("----------------------------------") ;
@@ -706,13 +820,21 @@ public class Partie {
     		while(check==false) {
     			System.out.println("----------------------------------") ;
     			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
-        		this.turn = scanner.nextInt();
+    			if (!(j instanceof Bot )) {
+    				// le joueur est physique
+    				this.turn = scanner.nextInt();
+    			} else {
+    				// le joueur est un bot
+    				
+    				Bot bot = (Bot)j;
+    				bot.chooseNextPlayer(this);
+    			}
         		if(this.turn > 0 && this.turn <= nbJoueurTot && this.joueur.get(this.turn-1).elimine==false && this.turn != numJoueur) {
         			check=true;
         		}
         		else {
         			System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 13 ");
                 	System.out.println("---------------------------------");
         		}
     		}
@@ -724,7 +846,7 @@ public class Partie {
 		System.out.println("Au tour du joueur "+ this.turn); // on affiche le numero du prochain joueur
     }
     
-    */
+   
     
     public static void main(String[] args) {
     	System.out.println("---------------------------------");
@@ -749,7 +871,7 @@ public class Partie {
         	}
         	else {
         		System.out.println("---------------------------------");
-            	System.out.println("La saisie est incorrecte");
+            	System.out.println("La saisie est incorrecte 14 ");
             	System.out.println("---------------------------------");
         	}
     	}
@@ -780,7 +902,7 @@ public class Partie {
             	}
             	else {
             		System.out.println("---------------------------------");
-                	System.out.println("La saisie est incorrecte");
+                	System.out.println("La saisie est incorrecte 15");
                 	System.out.println("---------------------------------");
             	}
     		}
@@ -845,5 +967,17 @@ public class Partie {
     	
      	
     }
+	public JeuCartes getJeu() {
+		return jeu;
+	}
+	public void setJeu(JeuCartes jeu) {
+		this.jeu = jeu;
+	}
+	public int getTurn() {
+		return turn;
+	}
+	public static String getW() {
+		return w;
+	}
 
 }

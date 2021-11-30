@@ -163,7 +163,7 @@ public class Joueur {
 			System.out.println("Voici la carte que vous avez revele avec son effet Witch? : ");
 			System.out.println("-------------------------------------------------------------");
     		this.revelerCarteRumeur(this.main.get(numCarteRevelee-1));
-			this.effetWitch(partie, this.main.get(numCarteRevelee-1), joueurAccusant.numJoueur, this.numJoueur);
+			partie.effetWitch(this.main.get(numCarteRevelee-1), joueurAccusant.numJoueur, this.numJoueur);
 			
 			this.carteRevelee.add(this.main.get(numCarteRevelee-1)); // supprimer la carte jouee apres l'avoir active
     		this.main.remove(numCarteRevelee-1);
@@ -247,7 +247,7 @@ public class Joueur {
     		CarteRumeur carteJouee = this.main.get(numCarteRevelee-1);
     		this.revelerCarteRumeur(carteJouee);
     		
-    		this.effetHunt(partie, carteJouee,this.numJoueur); // activer effet hunt!
+    		partie.effetHunt(carteJouee,this.numJoueur); // activer effet hunt!
     		
     		this.carteRevelee.add(carteJouee); // supprimer la carte jouee apres l'avoir active
     		this.main.remove(numCarteRevelee-1);
@@ -274,7 +274,7 @@ public class Joueur {
 
     	
     }*/
-    public void effetWitch(Partie partie ,CarteRumeur carte, int numJoueurAccusant, int numJoueurAccuse) {
+  /*  public void effetWitch(Partie partie ,CarteRumeur carte, int numJoueurAccusant, int numJoueurAccuse) {
 		Joueur j = partie.joueur.get(numJoueurAccuse-1); // joueur accuse
 		Joueur j1 = partie.joueur.get(numJoueurAccusant-1); // joueur accusant
 
@@ -779,7 +779,7 @@ public class Joueur {
 
     	     System.out.println("----------------------------------") ;
     	     System.out.println("Au tour du joueur "+ partie.turn); // on affiche le numero du prochain joueur
-   }
+   }*/
     	   
    public boolean isAccused()
    {
