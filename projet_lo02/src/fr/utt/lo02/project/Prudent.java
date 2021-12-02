@@ -19,9 +19,16 @@ public class Prudent implements Strategie {
 		// accuser le joueur choisi
 		Joueur joueurAccuse = partie.joueur.get(numJoueurAccuse);
 		System.out.println("-------------------------------------------------------------");
-		System.out.println(" J'accuse le joueur numero: " + (numJoueurAccuse + 1));
+		System.out.println(" J'accuse le joueur numero : " + (numJoueurAccuse + 1));
 		System.out.println("-------------------------------------------------------------");
 		joueurAccuse.isAccused(partie,partie.joueur.get(numBot - 1));
+		if(joueurAccuse.elimine == true) {
+			partie.joueur.get(numBot - 1).point++;
+			partie.turn = numBot;
+		}
+		else {
+			partie.turn = numJoueurAccuse+1;
+		}
 		
 		return partie;
 		
@@ -47,10 +54,15 @@ public class Prudent implements Strategie {
     		
     		bot.setRevealed(true);
 			System.out.println("-------------------------------------------------------------");
-			System.out.println("Mon rôle est est " + bot.getRole());
+			System.out.println("Mon rôle est " + bot.getRole());
 			System.out.println("-------------------------------------------------------------");
 			if(bot.getRole().equalsIgnoreCase("witch")) {
 				bot.setElimine(true);
+				joueurAccusant.point++;
+				partie.turn = joueurAccusant.numJoueur;
+			}
+			else {
+				partie.turn = numBot;
 			}
     	}
     	

@@ -165,6 +165,10 @@ public class Joueur {
     		this.revelerCarteRumeur(this.main.get(numCarteRevelee-1));
 			partie.effetWitch(this.main.get(numCarteRevelee-1), joueurAccusant.numJoueur, this.numJoueur);
 			
+			if(this.main.get(numCarteRevelee-1).witch == Witch.INQUISITION) {
+				numCarteRevelee--;
+			}
+				
 			this.carteRevelee.add(this.main.get(numCarteRevelee-1)); // supprimer la carte jouee apres l'avoir active
     		this.main.remove(numCarteRevelee-1);
 		}

@@ -11,15 +11,15 @@ public class Partie {
     protected int nbOrdi;
     protected int gagnant;
     
-    private int nbJoueurElimine;
-    private int nbJoueurRevele;
+    protected int nbJoueurElimine;
+    protected int nbJoueurRevele;
 
 
     // constante utilisee pour savoir si un joueur est witch ou villager
     protected static final String w="witch"; 
     protected static final String v="villager";
     
-    private static boolean check = false; // à utiliser pour verifier des conditions d'entree pour l'utilisateur
+    private static boolean check = false; // a utiliser pour verifier des conditions d'entree pour l'utilisateur
 
     public ArrayList<Joueur> joueur = new ArrayList<Joueur> ();
     public static Scanner scanner = new Scanner(System.in);
@@ -181,9 +181,9 @@ public class Partie {
     	System.out.println("Le jeu est termine !!!!!!");
     	System.out.println("--------------------------");
     }
-    public void debutRound(int nbJoueur) { // on distribue les cartes à tout les joueurs
+    public void debutRound(int nbJoueur) { // on distribue les cartes a tout les joueurs
     	
-    	this.nbJoueurElimine = 0; // on reset le nb de joueurs elimines à 0
+    	this.nbJoueurElimine = 0; // on reset le nb de joueurs elimines a 0
     	this.nbJoueurRevele = 0;
     	this.jeu.melanger(); // melanger les cartes
     	int tempNbCarte = 0;
@@ -274,44 +274,86 @@ public class Partie {
 		Joueur j1 = this.joueur.get(numJoueurAccusant-1); // joueur accusant
 
     	if(carte.witch == Witch.ANGRYMOB || carte.witch == Witch.BROOMSTICK || carte.witch == Witch.WART || carte.witch == Witch.TOAD || carte.witch == Witch.BLACKCAT || carte.witch == Witch.PETNEWT) { //prendre le prochain tour
+    		System.out.println("---------------------------------");
     		System.out.println("Vous prenez un autre tour");
-    		System.out.println("------------------------");
     		this.turn = numJoueurAccuse;
     	}
-    	else if(carte.witch == Witch.INQUISITION){ // reprendre carte revelee
+    	else if(carte.witch == Witch.INQUISITION){
+    		if(j.main.size()>1) {
+    			int numCarte = 0;
+        		check = false;
+        		while(check==false) {
+    	    		System.out.println("---------------------------------");
+        			System.out.print("Entrez le numero de la carte que vous voulez supprimer :  ");
+        			if (!(j instanceof Bot )) {
+        				// le joueur est physique
+        				numCarte = scanner.nextInt();
+        			} else {
+        				// le joueur est un bot
+        				
+        				Bot bot = (Bot)j;
+        				numCarte = bot.chooseCard();
+        			}
+            		
+            		
+            		if(numCarte > 0 && numCarte <= j.main.size() && carte != this.joueur.get(numJoueurAccuse-1).main.get(numCarte-1)) {
+            			check=true;
+            		}
+            		else {
+            			System.out.println("---------------------------------");
+                    	System.out.println("La saisie est incorrecte");
+                    	System.out.println("---------------------------------");
+            		}
+        		}
+        		j.carteRevelee.add(j.main.get(numCarte-1));
+			    j.main.remove(numCarte-1);
+	    		System.out.println("---------------------------------");
+			    System.out.println("Carte supprimee !!!") ;
+			    System.out.println(j.main);
+    		}
+    		else {
+	    		System.out.println("---------------------------------");
+    			System.out.println("Vous n'avez plus de cartes ! Aucune carte n'a ete supprimee.  ");
+    		}
+    		System.out.println("---------------------------------");
+    		System.out.println("Vous prenez un autre tour");
+    		this.turn = numJoueurAccuse;
+    		
+    	}
+    	else if(carte.witch == Witch.POINTEDHAT){ // reprendre carte revelee
     		if(j.estVide(j.carteRevelee)==false) {
+	    		System.out.println("---------------------------------");
     			System.out.println("Vous reprenez une carte que vous avez revele");
-        		System.out.println("------------------------");
         		j.main.add(j.carteRevelee.get(0));
         		j.carteRevelee.remove(0); // on enleve la carte des cartes revelees
-        		System.out.println("Voici votre main à present : ");
+        		System.out.println("---------------------------------");
+        		System.out.println("Voici votre main a present : ");
         		System.out.println(j.main);
-        		System.out.println("------------------------");
         		
     		}
     		else {
+    			System.out.println("---------------------------------");
     			System.out.println("Vous n'avez revele aucune carte");
-        		System.out.println("------------------------");
     		}
     		
     		this.turn = numJoueurAccuse;
 
     	}
-    	else if(carte.witch == Witch.POINTEDHAT){ // prendre une carte de l'adversaire
+    	else if(carte.witch == Witch.HOOKEDNOSE){ // prendre une carte de l'adversaire
     		
     		if(j1.estVide(j1.main) == false && j1.main.size() > 1 ) { // le joueur accuse peut prendre une carte si la main de l'adversaire n'est pas vide 
+    			System.out.println("---------------------------------");
     			System.out.println("Vous prenez une carte au hasard du joueur accusant");
-        		System.out.println("------------------------");
     			j.main.add(j1.main.get(0));
         		j1.main.remove(0); // on enleve la carte de la main du joueur accusant
-        		System.out.println("Voici votre main à present :");
-        		System.out.println("------------------------");
+        		System.out.println("---------------------------------");
+        		System.out.println("Voici votre main a present :");
+        		
         		System.out.println(j.main);
-        		System.out.println("------------------------");
     		}
     		else {
+    			System.out.println("---------------------------------");
     			System.out.println("Le joueur accusant n'a plus de carte rumeur. Vous ne lui prenez rien");
-        		System.out.println("------------------------");
     		}
     		
     		this.turn = numJoueurAccuse;
@@ -320,14 +362,17 @@ public class Partie {
     	else if(carte.witch == Witch.DUCKINGSTOOL || carte.witch == Witch.EVILEYE){ //choisir le prochain joueur
     		check = false;
     		while(check==false) {
-    			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
+    			
         		
         		if (!(j instanceof Bot )) {
     				// le joueur est physique
+        			System.out.println("---------------------------------");
+        			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
     				this.turn = scanner.nextInt();
     			} else {
     				// le joueur est un bot
-    				
+    				System.out.println("---------------------------------");
+        			System.out.println("Le bot choisit le prochain joueur ");
     				Bot bot = (Bot)j;
     				bot.chooseNextPlayer(this);
     			}
@@ -342,27 +387,26 @@ public class Partie {
     		}
     		
     		
-    		System.out.println("------------------------");
     		
     	}
     	else if(carte.witch == Witch.CAULDRON){ //Le joueur qui vous accuse jette une carte et vous prenez le prochain tour
+    		System.out.println("---------------------------------");
     		System.out.println("Le joueur accusant doit jeter une carte");
-    		System.out.println("------------------------");
     		if(j1.estVide(j1.main)==false) {
     			j1.melanger();
         		j1.carteRevelee.add(j1.main.get(0));
         		j1.main.remove(0);
-        		System.out.println("Voici la main du joueur accuse apres avoir jete une carte : ");
+        		System.out.println("---------------------------------");
+        		System.out.println("Voici la main du joueur accusant apres avoir jete une carte : ");
         		System.out.println(j1.main);
-        		System.out.println("------------------------");
     		}
     		else {
+    			System.out.println("---------------------------------");
         		System.out.println("Malheureusement le joueur accusant n'a plus de cartes rumeurs. Vous venez d'utiliser inutilement votre carte !");
-        		System.out.println("------------------------");
 
     		}
+    		System.out.println("---------------------------------");
     		System.out.println("Vous prenez le tour suivant");
-    		System.out.println("------------------------");
     		this.turn = numJoueurAccuse;
     		
     	}
@@ -378,14 +422,17 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("------------------------");
-        		System.out.print("Entrer le numero du joueur dont vous voulez reveler l'identite :");
+    			
         	
         		if (!(j instanceof Bot )) {
     				// le joueur est physique
+        			System.out.println("------------------------");
+            		System.out.print("Entrer le numero du joueur dont vous voulez reveler l'identite :");
         			numJoueurChoisi = scanner.nextInt();
     			} else {
     				// le joueur est un bot
+    				System.out.println("------------------------");
+            		System.out.println("Le bot choisit un joueur pour reveler son identite");
     				Bot bot = (Bot)j;
     				numJoueurChoisi = bot.chooseRandomPlayer(this);
     			}
@@ -427,14 +474,16 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
+    			
     			if (!(j instanceof Bot )) {
     				// le joueur est physique
+    				System.out.println("----------------------------------") ;
+        			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
     				this.turn = scanner.nextInt();
     			} else {
     				// le joueur est un bot
-    				
+    				System.out.println("----------------------------------") ;
+        			System.out.println("Le bot choisit le joueur suivant ");
     				Bot bot = (Bot)j;
     				bot.chooseNextPlayer(this);
     			}
@@ -466,15 +515,17 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
+    			
     			
     			if (!(j instanceof Bot )) {
     				// le joueur est physique
+    				System.out.println("----------------------------------") ;
+        			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
     				this.turn = scanner.nextInt();
     			} else {
     				// le joueur est un bot
-    				
+    				System.out.println("----------------------------------") ;
+        			System.out.println("Entrez le numero du joueur qui joue le prohain tour : ");
     				Bot bot = (Bot)j;
     				bot.chooseNextPlayer(this);
     			}
@@ -488,21 +539,23 @@ public class Partie {
         		}
     		}
     		System.out.println("----------------------------------") ;
-    		System.out.println("Voici l'identite du joueur que vous avez choisi (à regarder discretement) : "+this.joueur.get(this.turn-1).role) ;
+    		System.out.println("Voici l'identite du joueur que vous avez choisi (a regarder discretement) : "+this.joueur.get(this.turn-1).role) ;
 
     	}
     	else if(carte.hunt==Hunt.HOOKEDNOSE) {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
+    			
     			if (!(j instanceof Bot )) {
     				// le joueur est physique
+    				System.out.println("----------------------------------") ;
+        			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
     				this.turn = scanner.nextInt();
     			} else {
     				// le joueur est un bot
-    				
+    				System.out.println("----------------------------------") ;
+        			System.out.println("Entrez le numero du joueur qui joue le prohain tour : ");
     				Bot bot = (Bot)j;
     				bot.chooseNextPlayer(this);
     			}
@@ -521,7 +574,7 @@ public class Partie {
     		Joueur j1 = this.joueur.get(this.turn-1);
     		if(j1.estVide(j1.main)==false) {
     			j.melanger(); // melanger les cartes du joueur
-    			j.main.add(j1.main.get(0)); // le joueur j prend une carte aleatoire à j1
+    			j.main.add(j1.main.get(0)); // le joueur j prend une carte aleatoire a j1
     			j1.main.remove(0);
     			System.out.println("----------------------------------") ;
         		System.out.println("Vous lui avez pris une carte avec succes !!!!") ;
@@ -536,14 +589,16 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
+    			
     			if (!(j instanceof Bot )) {
     				// le joueur est physique
+    				System.out.println("----------------------------------") ;
+        			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
     				this.turn = scanner.nextInt();
     			} else {
     				// le joueur est un bot
-    				
+    				System.out.println("----------------------------------") ;
+        			System.out.println("Entrez le numero du joueur qui joue le prohain tour : ");
     				Bot bot = (Bot)j;
     				bot.chooseNextPlayer(this);
     			}
@@ -566,13 +621,16 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("----------------------------------") ;
-        		System.out.print("Entrez le numero du joueur que vous voulez choisir : ");
+    			
         		if (!(j instanceof Bot )) {
     				// le joueur est physique
+        			System.out.println("----------------------------------") ;
+            		System.out.print("Entrez le numero du joueur que vous voulez choisir : ");
         			numJ = scanner.nextInt();
     			} else {
     				// le joueur est un bot
+    				System.out.println("----------------------------------") ;
+            		System.out.println("Entrez le numero du joueur que vous voulez choisir : ");
     				Bot bot = (Bot)j;
     				numJ = bot.chooseRandomPlayer(this);
     			}
@@ -592,17 +650,21 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("Joueur "+numJ+" : Reveler votre identite(1) ou supprimer une carte(2) ? ");
+    			
     			if (!(j1 instanceof Bot )) {
     				// le joueur est physique
+        			System.out.println("----------------------------------") ;
+    				System.out.print("Joueur "+numJ+" : Reveler votre identite(1) ou supprimer une carte(2) ? ");
         			action = scanner.nextInt();
     			} else {
     				// le joueur est un bot
+        			System.out.println("----------------------------------") ;
+    				System.out.println("Joueur "+numJ+" : Reveler votre identite(1) ou supprimer une carte(2) ? ");
     				Bot bot = (Bot)j1;
     				action = bot.revealOrDelete() ;
     			}
     			
-        		if((action==1 && j1.revealed==false) || (action==2 && j1.estVide(j1.main)) || action == 3) {
+        		if((action==1 && j1.revealed==false) || (action==2 && j1.estVide(j1.main)==false) || action == 3) {
         			check=true;
         		}
         		else {
@@ -640,15 +702,17 @@ public class Partie {
         		check = false;
         		
         		while(check==false) {
-        			System.out.println("----------------------------------") ;
-            		System.out.print("Joueur "+numJ+" : Entrez le numero de la carte que vous voulez supprimer : ") ;
-            		numCarte = scanner.nextInt();
-            		if (!(j instanceof Bot )) {
+        			
+            		if (!(j1 instanceof Bot )) {
         				// le joueur est physique
+            			System.out.println("----------------------------------") ;
+                		System.out.print("Joueur "+numJ+" : Entrez le numero de la carte que vous voulez supprimer : ") ;
             			numCarte = scanner.nextInt();
         			} else {
         				// le joueur est un bot
-        				Bot bot = (Bot)j;
+        				System.out.println("----------------------------------") ;
+                		System.out.println("Joueur "+numJ+" : Entrez le numero de la carte que vous voulez supprimer : ") ;
+        				Bot bot = (Bot)j1;
         				numCarte = bot.chooseCard() ;
         			}
             		
@@ -665,9 +729,10 @@ public class Partie {
     			j1.main.remove(numCarte-1);
         		System.out.println("----------------------------------") ;
         		System.out.println("Carte supprimee !!!") ;
-        		System.out.println(j.main);
+        		System.out.println(j1.main);
 
-    		}else {
+    		}
+    		else {
     			System.out.println("---------------------------------");
             	System.out.println("Le joueur selectionne est deja revele et n'a plus de cartes a la main ");
             	System.out.println("---------------------------------");
@@ -676,11 +741,11 @@ public class Partie {
     	}
     	else if(carte.hunt == Hunt.CAULDRON || carte.hunt == Hunt.TOAD) { 
     		System.out.println("----------------------------------") ;
-    		System.out.println("Vous devez reveler votre identite : vous êtes un "+j.role);
+    		System.out.println("Vous devez reveler votre identite : vous etes un "+j.role);
     		j.revealed = true;
     		if(j.role.equalsIgnoreCase(w)) {
     			System.out.println("----------------------------------") ;
-        		System.out.println("Vous êtes witch, vous êtes donc elimines du round !! Le joueur suivant joue le prochain tour. ");
+        		System.out.println("Vous etes witch, vous etes donc elimines du round !! Le joueur suivant joue le prochain tour. ");
     			this.turn++;
     			j.elimine = true;
     			if(this.turn>nbJoueurTot) { // retourner au joueur 1 apres le tour du dernier joueur
@@ -692,14 +757,16 @@ public class Partie {
     			check = false;
         		
         		while(check==false) {
-        			System.out.println("----------------------------------") ;
-        			System.out.print("Vous êtes villager, entrez le numero du joueur qui joue le prohain tour : ");
+        			
         			if (!(j instanceof Bot )) {
         				// le joueur est physique
+        				System.out.println("----------------------------------") ;
+            			System.out.print("Vous etes villager, entrez le numero du joueur qui joue le prohain tour : ");
         				this.turn = scanner.nextInt();
         			} else {
         				// le joueur est un bot
-        				
+        				System.out.println("----------------------------------") ;
+            			System.out.println("Vous etes villager, entrez le numero du joueur qui joue le prohain tour : ");
         				Bot bot = (Bot)j;
         				bot.chooseNextPlayer(this);
         			}
@@ -719,14 +786,16 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
+    			
     			if (!(j instanceof Bot )) {
     				// le joueur est physique
+    				System.out.println("----------------------------------") ;
+        			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
     				this.turn = scanner.nextInt();
     			} else {
     				// le joueur est un bot
-    				
+    				System.out.println("----------------------------------") ;
+        			System.out.println("Entrez le numero du joueur qui joue le prohain tour : ");
     				Bot bot = (Bot)j;
     				bot.chooseNextPlayer(this);
     			}
@@ -764,14 +833,17 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("----------------------------------") ;
-        		System.out.print("Choisir un joueur pour lui prendre une carte rumeur qu'il a revele : ");
+    			
         		
         		if (!(j instanceof Bot )) {
     				// le joueur est physique
+        			System.out.println("----------------------------------") ;
+            		System.out.print("Choisir un joueur pour lui prendre une carte rumeur qu'il a revele : ");
         			numJ = scanner.nextInt();
     			} else {
     				// le joueur est un bot
+    				System.out.println("----------------------------------") ;
+            		System.out.println("Choisir un joueur pour lui prendre une carte rumeur qu'il a revele : ");
     				Bot bot = (Bot)j;
     				numJ = bot.chooseRandomPlayer(this);
     			}
@@ -789,14 +861,17 @@ public class Partie {
     		
     		if(j1.estVide(j1.carteRevelee)==false) { // si le joueur choisi a revele une ou plusieurs cartes
     			System.out.println(j1.carteRevelee);
-        		System.out.println("----------------------------------") ;
-        		System.out.print("Choisir une carte qu'il a revele (entrez le numero de la carte : ");
+        		
         		int numCarte;
         		if (!(j instanceof Bot )) {
     				// le joueur est physique
+        			System.out.println("----------------------------------") ;
+            		System.out.print("Choisir une carte qu'il a revele (entrez le numero de la carte : ");
         			numCarte = scanner.nextInt();
     			} else {
     				// le joueur est un bot
+    				System.out.println("----------------------------------") ;
+            		System.out.println("Choisir une carte qu'il a revele (entrez le numero de la carte : ");
     				Bot bot = (Bot)j;
     				numCarte = bot.pickRevealedCard(j1);
     			}
@@ -818,14 +893,16 @@ public class Partie {
     		check = false;
     		
     		while(check==false) {
-    			System.out.println("----------------------------------") ;
-    			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
+    			
     			if (!(j instanceof Bot )) {
     				// le joueur est physique
+    				System.out.println("----------------------------------") ;
+        			System.out.print("Entrez le numero du joueur qui joue le prohain tour : ");
     				this.turn = scanner.nextInt();
     			} else {
     				// le joueur est un bot
-    				
+    				System.out.println("----------------------------------") ;
+        			System.out.println("Entrez le numero du joueur qui joue le prohain tour : ");
     				Bot bot = (Bot)j;
     				bot.chooseNextPlayer(this);
     			}
