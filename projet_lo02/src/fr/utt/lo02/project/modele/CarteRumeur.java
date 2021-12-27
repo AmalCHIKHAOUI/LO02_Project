@@ -33,7 +33,7 @@ public class CarteRumeur extends Observable {
     
     public String toString() {
     	StringBuffer sb = new StringBuffer();
-    	sb.append("\n-----------------\n");
+    	sb.append("\n---------------------------------------------\n");
     	sb.append("\n Carte : ");
     	sb.append(this.witch);
     	sb.append("\n\n Witch? : ");
@@ -63,7 +63,7 @@ public class CarteRumeur extends Observable {
     		sb.append(" Le joueur qui vous accuse jette une carte aleatoire et vous prenez le prochain tour \n");
     	}
     	else if(this.witch == Witch.EVILEYE) {
-    		sb.append(" Choisir le prochain joueur \n");
+    		sb.append(" Choisir le prochain joueur et il devra, si possible, accuser un autre joueur (sauf vous) \n");
     	}
     	else if(this.witch == Witch.TOAD) {
     		sb.append(" Prendre le prochain tour \n");
@@ -111,6 +111,8 @@ public class CarteRumeur extends Observable {
     	else if(this.hunt == Hunt.PETNEWT) {
     		sb.append(" Prendre une carte revelee d'un autre joueur et choisir le prochain joueur \n");
     	}
+    	sb.append("\n---------------------------------------------\n");
+
     	return sb.toString();
     }
     

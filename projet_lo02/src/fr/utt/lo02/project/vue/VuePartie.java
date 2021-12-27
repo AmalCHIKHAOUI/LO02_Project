@@ -33,6 +33,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.SpinnerListModel;
 import javax.swing.JSeparator;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VuePartie extends JFrame implements Observer {
 
@@ -47,10 +49,8 @@ public class VuePartie extends JFrame implements Observer {
 	private JButton carte4;
 	private JButton boutonAccuser;
 	private JLabel labelAccuser;
-	private JTextPane textWitch;
-	private JTextPane textHunt;
-	private JLabel labelWitch;
-	private JLabel labelHunt;
+	private JTextPane textEffet;
+	private JLabel labelEffet;
 	private JSpinner spinnerAccuser;	
 	private JLabel labelAction;	
 	private JTextPane textAction;		
@@ -60,6 +60,7 @@ public class VuePartie extends JFrame implements Observer {
 	private JTextPane textNonRevele;	
 	private JLabel labelNonElimine;	
 	private JTextPane textNonElimine;
+	private JLabel labelID;
 	private JButton boutonCarteID;
 	private JLabel labelCarteRumeur;
 	private JCheckBox checkboxRevelerID;
@@ -79,15 +80,16 @@ public class VuePartie extends JFrame implements Observer {
 	protected boolean jouer;
 	protected boolean choisirJoueur;
 	protected boolean choixRole;
+	protected int numJoueurActuel;
+	protected int nbJoueurTot;
+	
+	protected int[] score = {0,0,0,0,0,0,0};
 	
 	//protected int i;
 	
 	protected ControleurPartie controleur;
 	
-	
-	
-	private ArrayList<Joueur> joueur = new ArrayList<Joueur>();
-
+	// --- Debut Getters et Setters ----
 	public boolean isAccuser() {
 		return accuser;
 	}
@@ -123,6 +125,17 @@ public class VuePartie extends JFrame implements Observer {
 	public void setChoixRole(boolean choixRole) {
 		this.choixRole = choixRole;
 	}
+	
+	
+	public int getNumJoueurActuel() {
+		return numJoueurActuel;
+	}
+
+	public void setNumJoueurActuel(int numJoueurActuel) {
+		this.numJoueurActuel = numJoueurActuel;
+	}
+
+	// --- Fin Getters et Setters ----
 
 	/**
 	 * Launch the application.
@@ -165,10 +178,8 @@ public class VuePartie extends JFrame implements Observer {
 		carte4.setEnabled(this.isJouer());
 		boutonAccuser.setEnabled(this.isJouer());
 		labelAccuser.setEnabled(this.isJouer());
-		textWitch.setEnabled(this.isJouer());
-		textHunt.setEnabled(this.isJouer());
-		labelWitch.setEnabled(this.isJouer());
-		labelHunt.setEnabled(this.isJouer());
+		textEffet.setEnabled(this.isJouer());
+		labelEffet.setEnabled(this.isJouer());
 		spinnerAccuser.setEnabled(this.isJouer());	
 		labelAction.setEnabled(this.isJouer());	
 		textAction.setEnabled(this.isJouer());		
@@ -178,6 +189,7 @@ public class VuePartie extends JFrame implements Observer {
 		textNonRevele.setEnabled(this.isJouer());	
 		labelNonElimine.setEnabled(this.isJouer());	
 		textNonElimine.setEnabled(this.isJouer());
+		labelID.setEnabled(this.isJouer());
 		boutonCarteID.setEnabled(this.isJouer());
 		labelCarteRumeur.setEnabled(this.isJouer());
 		checkboxRevelerID.setEnabled(this.isJouer());
@@ -185,29 +197,42 @@ public class VuePartie extends JFrame implements Observer {
 		
 		
 		if(instanceObservable instanceof Partie) {
-			
-			
-			//this.partie=((Partie)instanceObservable).getInstance();
+
+			this.partie=((Partie)instanceObservable).getInstance();
 			
 			this.labelNumJoueur.setText("Joueur "+partie.getTurn());
 			
+			// MaJ du tableau des scores
+			int iScore = 1;
+			for(Iterator<Joueur> it = partie.joueur.iterator(); it.hasNext(); ) { 
+				//this.joueur.add(it.next());
+				//this.joueur.get(i).addObserver(this);
+				Joueur j = it.next();
+				score[iScore]=j.getPoint();
+				iScore++;
+			}
+			switch(partie.joueur.size()) {
+				case 3 : 
+					textScore.setText("Joueur 1 : "+score[1]+" pts \n"+"Joueur 2 : "+score[2]+" pts \n"+"Joueur 3 : "+score[3]+" pts \n");
+					break;
+				case 4 : 
+					textScore.setText("Joueur 1 : "+score[1]+" pts \n"+"Joueur 2 : "+score[2]+" pts \n"+"Joueur 3 : "+score[3]+" pts \n"+"Joueur 4 : "+score[4]+" pts \n");
+					break;
+				case 5 : 
+					textScore.setText("Joueur 1 : "+score[1]+" pts \n"+"Joueur 2 : "+score[2]+" pts \n"+"Joueur 3 : "+score[3]+" pts \n"+"Joueur 4 : "+score[4]+" pts \n"+"Joueur 5 : "+score[5]+" pts \n");
+					break;
+				case 6 : 
+					textScore.setText("Joueur 1 : "+score[1]+" pts \n"+"Joueur 2 : "+score[2]+" pts \n"+"Joueur 3 : "+score[3]+" pts \n"+"Joueur 4 : "+score[4]+" pts \n"+"Joueur 5 : "+score[5]+" pts \n"+"Joueur 6 : "+score[6]+" pts \n");
+					break;
 
+			}
 			
-			
-			//this.boutonCarteID.setLabel(partie.joueur.get(partie.getTurn()-1).getRole());
-			
-			/*this.carte1.setLabel(partie.joueur.get(partie.getTurn()-1).main.get(0).witch.toString());
-			this.carte2.setLabel(partie.joueur.get(partie.getTurn()-1).main.get(1).witch.toString());
-			this.carte3.setLabel(partie.joueur.get(partie.getTurn()-1).main.get(2).witch.toString());
-			this.carte4.setLabel(partie.joueur.get(partie.getTurn()-1).main.get(3).witch.toString());*/
-
-			
-			
-			
+	
 		}
 		if(instanceObservable instanceof Joueur) {
 			
-			//this.labelNumJoueurRole.setText("Joueur "+ (i-1));			
+			this.numJoueurActuel = ((Joueur)instanceObservable).getNumJoueur();
+			
 			this.boutonCarteID.setLabel(partie.joueur.get(partie.getTurn()-1).getRole());
 			
 			switch(((Joueur)instanceObservable).main.size()) {
@@ -262,7 +287,7 @@ public class VuePartie extends JFrame implements Observer {
 		this.jouer = false;
 		this.choisirJoueur = false;
 		this.choixRole = false;
-		//this.i=1;
+		this.numJoueurActuel = 0;
 		
 		this.partie = partie;
 		this.partie.addObserver(this);
@@ -281,16 +306,18 @@ public class VuePartie extends JFrame implements Observer {
 			CarteRumeur carte = it.next();
 			carte.addObserver(this);
 		}
-		int nbJoueurTot = this.partie.getNbJoueur()+this.partie.getNbOrdi();
+		this.nbJoueurTot = this.partie.getNbJoueur()+this.partie.getNbOrdi();
+
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 606, 704);
+		setBounds(100, 100, 606, 749);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		labelNumJoueur = new JLabel("Joueur "+partie.getTurn());
+		labelNumJoueur.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
 		labelNumJoueur.setEnabled(false);
 		labelNumJoueur.setHorizontalAlignment(SwingConstants.LEFT);
 		labelNumJoueur.setBounds(24, 135, 101, 19);
@@ -332,74 +359,74 @@ public class VuePartie extends JFrame implements Observer {
 		labelAccuser.setBounds(227, 167, 102, 13);
 		contentPane.add(labelAccuser);
 		
-		textWitch = new JTextPane();
-		textWitch.setEnabled(false);
-		textWitch.setBounds(24, 360, 457, 43);
-		contentPane.add(textWitch);
+		textEffet = new JTextPane();
+		textEffet.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		textEffet.setEnabled(false);
+		textEffet.setBounds(24, 360, 487, 167);
+		contentPane.add(textEffet);
 		
-		textHunt = new JTextPane();
-		textHunt.setEnabled(false);
-		textHunt.setBounds(24, 428, 457, 49);
-		contentPane.add(textHunt);
-		
-		labelWitch = new JLabel("Effet Witch");
-		labelWitch.setEnabled(false);
-		labelWitch.setBounds(24, 345, 80, 13);
-		contentPane.add(labelWitch);
-		
-		labelHunt = new JLabel("Effet Hunt");
-		labelHunt.setEnabled(false);
-		labelHunt.setBounds(24, 413, 80, 13);
-		contentPane.add(labelHunt);
+		labelEffet = new JLabel("Effet Witch? et Hunt! :");
+		labelEffet.setEnabled(false);
+		labelEffet.setBounds(24, 345, 134, 13);
+		contentPane.add(labelEffet);
 		
 		spinnerAccuser = new JSpinner();
 		spinnerAccuser.setEnabled(false);
-		spinnerAccuser.setModel(new SpinnerNumberModel(1, 1, 6, 1));
+		spinnerAccuser.setModel(new SpinnerNumberModel(1, 1, nbJoueurTot, 1));
 		spinnerAccuser.setBounds(331, 164, 30, 20);
 		contentPane.add(spinnerAccuser);
 		
 		labelAction = new JLabel("Actions r\u00E9alis\u00E9es");
 		labelAction.setEnabled(false);
-		labelAction.setBounds(24, 504, 134, 13);
+		labelAction.setBounds(24, 537, 134, 13);
 		contentPane.add(labelAction);
 		
 		textAction = new JTextPane();
 		textAction.setEnabled(false);
-		textAction.setBounds(24, 519, 457, 49);
+		textAction.setBounds(24, 552, 457, 49);
 		contentPane.add(textAction);
 		
 		labelScore = new JLabel("Tableau des scores :");
-		labelScore.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		labelScore.setFont(new Font("Tahoma", Font.BOLD, 10));
 		labelScore.setEnabled(false);
-		labelScore.setBounds(24, 578, 134, 13);
+		labelScore.setBounds(24, 611, 134, 13);
 		contentPane.add(labelScore);
 		
 		textScore = new JTextPane();
+		textScore.setFont(new Font("Tahoma", Font.BOLD, 9));
 		textScore.setEnabled(false);
-		textScore.setBounds(24, 593, 134, 49);
+		textScore.setBounds(24, 626, 134, 76);
 		contentPane.add(textScore);
 		
 		labelNonRevele = new JLabel("Joueurs non r\u00E9v\u00E9l\u00E9s :");
-		labelNonRevele.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		labelNonRevele.setFont(new Font("Tahoma", Font.BOLD, 10));
 		labelNonRevele.setEnabled(false);
-		labelNonRevele.setBounds(179, 578, 112, 13);
+		labelNonRevele.setBounds(179, 611, 134, 13);
 		contentPane.add(labelNonRevele);
 		
 		textNonRevele = new JTextPane();
+		textNonRevele.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		textNonRevele.setEnabled(false);
-		textNonRevele.setBounds(179, 593, 134, 49);
+		textNonRevele.setBounds(179, 626, 134, 76);
 		contentPane.add(textNonRevele);
 		
 		labelNonElimine = new JLabel("Joueurs non \u00E9limin\u00E9s :");
-		labelNonElimine.setFont(new Font("Tahoma", Font.PLAIN, 8));
+		labelNonElimine.setFont(new Font("Tahoma", Font.BOLD, 10));
 		labelNonElimine.setEnabled(false);
-		labelNonElimine.setBounds(331, 578, 155, 13);
+		labelNonElimine.setBounds(331, 611, 155, 13);
 		contentPane.add(labelNonElimine);
 		
 		textNonElimine = new JTextPane();
+		textNonElimine.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		textNonElimine.setEnabled(false);
-		textNonElimine.setBounds(333, 593, 148, 49);
+		textNonElimine.setBounds(333, 626, 148, 76);
 		contentPane.add(textNonElimine);
+		
+		labelID = new JLabel("Carte ID");
+		labelID.setEnabled(false);
+		labelID.setHorizontalAlignment(SwingConstants.CENTER);
+		labelID.setBounds(118, 75, 83, 13);
+		contentPane.add(labelID);
 		
 		boutonCarteID = new JButton("Carte ID");
 		boutonCarteID.setEnabled(false);
@@ -462,7 +489,11 @@ public class VuePartie extends JFrame implements Observer {
 		spinnerNumJoueurRole.setBounds(444, 18, 30, 20);
 		contentPane.add(spinnerNumJoueurRole);
 		
-		new ControleurPartie(this.partie,this,boutonChoisirJoueur,spinnerChoisirJoueur,boutonChoixRole,spinnerChoixRole,spinnerNumJoueurRole);
+		
+		
+		new ControleurPartie(this.partie,this,boutonChoisirJoueur,spinnerChoisirJoueur,boutonChoixRole,spinnerChoixRole,spinnerNumJoueurRole,carte1,carte2,carte3,carte4,textEffet);
+		
+		
 		
 		
 

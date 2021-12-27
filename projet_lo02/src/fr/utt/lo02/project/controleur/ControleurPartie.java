@@ -5,6 +5,8 @@ import fr.utt.lo02.project.vue.*;
 import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
@@ -17,7 +19,7 @@ public class ControleurPartie {
 
 	
 	public ControleurPartie(Partie partie, VuePartie vue, JButton boutonJoueurRound, JSpinner spinnerJoueurRound, JButton boutonChoixRole, JSpinner spinnerChoixRole,
-			JSpinner spinnerNumJoueurRole) {
+			JSpinner spinnerNumJoueurRole, JButton carte1, JButton carte2, JButton carte3, JButton carte4,JTextPane textEffet) {
 		this.partie = partie;
 		this.vue = vue;
 		i = 1;
@@ -71,6 +73,56 @@ public class ControleurPartie {
 					vue.setChoixRole(false);
 				}
 				
+			}
+		});
+		carte1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if(carte1.getLabel() != "Vide") {
+					textEffet.setText(partie.joueur.get(vue.getNumJoueurActuel()-1).main.get(0).toString());
+				}
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				textEffet.setText("");
+
+			}
+		});
+		carte2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if(carte2.getLabel() != "Vide") {
+					textEffet.setText(partie.joueur.get(vue.getNumJoueurActuel()-1).main.get(1).toString());
+				}			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				textEffet.setText("");
+
+			}
+		});
+		carte3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if(carte3.getLabel() != "Vide") {
+					textEffet.setText(partie.joueur.get(vue.getNumJoueurActuel()-1).main.get(2).toString());
+				}			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				textEffet.setText("");
+
+			}
+		});
+		carte4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if(carte4.getLabel() != "Vide") {
+					textEffet.setText(partie.joueur.get(vue.getNumJoueurActuel()-1).main.get(3).toString());
+				}			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				textEffet.setText("");
+
 			}
 		});
 	}
