@@ -29,7 +29,7 @@ public class VueDebutRound extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Partie partie = new Partie(0,0,null);
+					Partie partie = new Partie(0,0,null,true);
 					VueDebutRound frame = new VueDebutRound(partie,0,0);
 					frame.setVisible(true);
 				} catch (Exception e) {

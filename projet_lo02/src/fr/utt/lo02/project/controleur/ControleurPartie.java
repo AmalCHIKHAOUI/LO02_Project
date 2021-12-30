@@ -125,6 +125,13 @@ public class ControleurPartie {
 
 			}
 		});
+		carte1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				vue.setJouer(false);
+				CarteRumeur carteJouee = partie.joueur.get(partie.getTurn()-1).main.get(0);
+				partie.effetHunt(carteJouee,partie.getTurn());
+			}
+		});
 	}
 
 }

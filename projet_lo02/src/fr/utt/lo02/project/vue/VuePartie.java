@@ -88,6 +88,10 @@ public class VuePartie extends JFrame implements Observer {
 	//protected int i;
 	
 	protected ControleurPartie controleur;
+	private JSeparator separator_1;
+	private JLabel labelChoisirProchainJoueur;
+	private JSpinner spinnerChoisirProchainJoueur;
+	private JButton boutonChoisirProchainJoueur;
 	
 	// --- Debut Getters et Setters ----
 	public boolean isAccuser() {
@@ -144,7 +148,7 @@ public class VuePartie extends JFrame implements Observer {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Partie partie = new Partie(0,0,null);
+					Partie partie = new Partie(0,0,null,true);
 					VuePartie frame = new VuePartie(partie);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -178,18 +182,7 @@ public class VuePartie extends JFrame implements Observer {
 		carte4.setEnabled(this.isJouer());
 		boutonAccuser.setEnabled(this.isJouer());
 		labelAccuser.setEnabled(this.isJouer());
-		textEffet.setEnabled(this.isJouer());
-		labelEffet.setEnabled(this.isJouer());
 		spinnerAccuser.setEnabled(this.isJouer());	
-		labelAction.setEnabled(this.isJouer());	
-		textAction.setEnabled(this.isJouer());		
-		labelScore.setEnabled(this.isJouer());	
-		textScore.setEnabled(this.isJouer());		
-		labelNonRevele.setEnabled(this.isJouer());		
-		textNonRevele.setEnabled(this.isJouer());	
-		labelNonElimine.setEnabled(this.isJouer());	
-		textNonElimine.setEnabled(this.isJouer());
-		labelID.setEnabled(this.isJouer());
 		boutonCarteID.setEnabled(this.isJouer());
 		labelCarteRumeur.setEnabled(this.isJouer());
 		checkboxRevelerID.setEnabled(this.isJouer());
@@ -310,7 +303,7 @@ public class VuePartie extends JFrame implements Observer {
 
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 606, 749);
+		setBounds(100, 100, 1005, 749);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -318,7 +311,6 @@ public class VuePartie extends JFrame implements Observer {
 		
 		labelNumJoueur = new JLabel("Joueur "+partie.getTurn());
 		labelNumJoueur.setFont(new Font("Comic Sans MS", Font.BOLD, 13));
-		labelNumJoueur.setEnabled(false);
 		labelNumJoueur.setHorizontalAlignment(SwingConstants.LEFT);
 		labelNumJoueur.setBounds(24, 135, 101, 19);
 		contentPane.add(labelNumJoueur);
@@ -361,12 +353,10 @@ public class VuePartie extends JFrame implements Observer {
 		
 		textEffet = new JTextPane();
 		textEffet.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		textEffet.setEnabled(false);
 		textEffet.setBounds(24, 360, 487, 167);
 		contentPane.add(textEffet);
 		
 		labelEffet = new JLabel("Effet Witch? et Hunt! :");
-		labelEffet.setEnabled(false);
 		labelEffet.setBounds(24, 345, 134, 13);
 		contentPane.add(labelEffet);
 		
@@ -377,48 +367,40 @@ public class VuePartie extends JFrame implements Observer {
 		contentPane.add(spinnerAccuser);
 		
 		labelAction = new JLabel("Actions r\u00E9alis\u00E9es");
-		labelAction.setEnabled(false);
 		labelAction.setBounds(24, 537, 134, 13);
 		contentPane.add(labelAction);
 		
 		textAction = new JTextPane();
-		textAction.setEnabled(false);
 		textAction.setBounds(24, 552, 457, 49);
 		contentPane.add(textAction);
 		
 		labelScore = new JLabel("Tableau des scores :");
 		labelScore.setFont(new Font("Tahoma", Font.BOLD, 10));
-		labelScore.setEnabled(false);
 		labelScore.setBounds(24, 611, 134, 13);
 		contentPane.add(labelScore);
 		
 		textScore = new JTextPane();
 		textScore.setFont(new Font("Tahoma", Font.BOLD, 9));
-		textScore.setEnabled(false);
 		textScore.setBounds(24, 626, 134, 76);
 		contentPane.add(textScore);
 		
 		labelNonRevele = new JLabel("Joueurs non r\u00E9v\u00E9l\u00E9s :");
 		labelNonRevele.setFont(new Font("Tahoma", Font.BOLD, 10));
-		labelNonRevele.setEnabled(false);
 		labelNonRevele.setBounds(179, 611, 134, 13);
 		contentPane.add(labelNonRevele);
 		
 		textNonRevele = new JTextPane();
 		textNonRevele.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		textNonRevele.setEnabled(false);
 		textNonRevele.setBounds(179, 626, 134, 76);
 		contentPane.add(textNonRevele);
 		
 		labelNonElimine = new JLabel("Joueurs non \u00E9limin\u00E9s :");
 		labelNonElimine.setFont(new Font("Tahoma", Font.BOLD, 10));
-		labelNonElimine.setEnabled(false);
 		labelNonElimine.setBounds(331, 611, 155, 13);
 		contentPane.add(labelNonElimine);
 		
 		textNonElimine = new JTextPane();
 		textNonElimine.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		textNonElimine.setEnabled(false);
 		textNonElimine.setBounds(333, 626, 148, 76);
 		contentPane.add(textNonElimine);
 		
@@ -489,9 +471,27 @@ public class VuePartie extends JFrame implements Observer {
 		spinnerNumJoueurRole.setBounds(444, 18, 30, 20);
 		contentPane.add(spinnerNumJoueurRole);
 		
-		
+		separator_1 = new JSeparator();
+		separator_1.setOrientation(SwingConstants.VERTICAL);
+		separator_1.setBounds(596, 11, 2, 691);
+		contentPane.add(separator_1);
 		
 		new ControleurPartie(this.partie,this,boutonChoisirJoueur,spinnerChoisirJoueur,boutonChoixRole,spinnerChoixRole,spinnerNumJoueurRole,carte1,carte2,carte3,carte4,textEffet);
+		
+		labelChoisirProchainJoueur = new JLabel("Choisir le prochain joueur :");
+		labelChoisirProchainJoueur.setBounds(617, 21, 146, 13);
+		contentPane.add(labelChoisirProchainJoueur);
+		
+		spinnerChoisirProchainJoueur = new JSpinner();
+		spinnerChoisirProchainJoueur.setModel(new SpinnerNumberModel(1, 1, 6, 1));
+		spinnerChoisirProchainJoueur.setBounds(791, 18, 39, 20);
+		contentPane.add(spinnerChoisirProchainJoueur);
+		
+		boutonChoisirProchainJoueur = new JButton("Valider");
+		boutonChoisirProchainJoueur.setBounds(849, 17, 85, 21);
+		contentPane.add(boutonChoisirProchainJoueur);
+		
+		
 		
 		
 		

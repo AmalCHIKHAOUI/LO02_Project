@@ -12,6 +12,11 @@ public class Partie extends Observable {
     protected int nbOrdi;
     protected int gagnant;
     
+    public boolean partieGUI;
+    /**
+     * Booléen utilisé pour vérifier si la partie est executée en ligne de commande ou avec le GUI
+     */
+    
     protected int nbJoueurElimine;
     protected int nbJoueurRevele;
 
@@ -30,7 +35,7 @@ public class Partie extends Observable {
 
 
     
-    public Partie(int nbJoueur, int nbOrdi, JeuCartes jeu) {
+    public Partie(int nbJoueur, int nbOrdi, JeuCartes jeu, boolean partieGUI) {
     	this.nbJoueur = nbJoueur;
     	this.nbOrdi = nbOrdi;
     	this.round = 1;
@@ -39,6 +44,7 @@ public class Partie extends Observable {
     	this.jeu = jeu;
     	this.nbJoueurElimine = 0;
     	this.nbJoueurRevele = 0;
+    	this.partieGUI=partieGUI;
 
 
     }
@@ -969,7 +975,7 @@ public class Partie extends Observable {
     	}
     	
 
-    	Partie partie = new Partie(nbJoueur, nbOrdi, jeu);
+    	Partie partie = new Partie(nbJoueur, nbOrdi, jeu, false);
     	
     	
     	partie.debutJeu();

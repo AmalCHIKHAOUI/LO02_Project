@@ -80,7 +80,7 @@ public class VueNbJoueur extends JFrame {
 				int nbBot = (Integer)spinner_1.getValue();
 				int nbJoueurTot = nbJoueur+nbBot;
 				if(nbJoueurTot>=3 && nbJoueurTot<=6) {
-					Partie partie = new Partie(nbJoueur, nbBot, jeu);
+					Partie partie = new Partie(nbJoueur, nbBot, jeu, true);
 			    	partie.initListeJoueur(nbJoueur,nbBot); //initialiser la liste des joueurs
 
 					VuePartie nextFrame = new VuePartie(partie);
